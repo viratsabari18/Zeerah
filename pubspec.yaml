@@ -1,0 +1,64 @@
+name: zeerah
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  carousel_slider: ^5.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+  card_swiper: ^3.0.1
+flutter:
+  uses-material-design: true
+
+  assets:
+    - lib/assets/images/splash_screen.webp
+    - lib/assets/images/sign_in.webp
+    - lib/assets/images/google_sign.webp
+    - lib/assets/images/mail_signin.webp
+    - lib/assets/images/otp_verifly.webp
+    - lib/assets/images/appliance_repair.webp
+    - lib/assets/images/cleaning.webp
+    - lib/assets/images/electrician.webp
+    - lib/assets/images/home_page_banner.png
+    - lib/assets/images/home_page_calender.webp
+    - lib/assets/images/home_page_gardering.webp
+    - lib/assets/images/home_page_gift_box.webp
+    - lib/assets/images/home_page_location.webp
+    - lib/assets/images/home_page_notifications.webp
+    - lib/assets/images/home_page_parse.webp
+    - lib/assets/images/pest_control.webp
+    - lib/assets/images/plumber.webp
+    - lib/assets/images/homepage_background_banner.webp
+    - lib/assets/images/home_page_appbar_coin.webp
+    - lib/assets/images/homepage_banner_dummy_image.png
+    - lib/assets/images/homepage_banner_dummy_image2.png
+    - lib/assets/images/homepage_banner_dummy_image3.png
+    - lib\assets\images\explore_category1.png
+    - lib\assets\images\explore_category2.png
+    - lib\assets\images\explore_category3.png
+    - lib\assets\images\explore_category4.png
+
+  fonts:
+  - family: Inter
+    fonts:
+      - asset: lib/assets/fonts/Inter-Light.ttf
+        weight: 300
+      - asset: lib/assets/fonts/Inter-Medium.ttf
+        weight: 500
+      - asset: lib/assets/fonts/Inter-SemiBold.ttf
+        weight: 600
+      - asset: lib/assets/fonts/Inter-Bold.ttf
+        weight: 700
