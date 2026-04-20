@@ -1,4 +1,3 @@
-
 import 'package:zeerah/core/common/app_exports.dart';
 
 class ExpoloreCategories extends StatefulWidget {
@@ -47,6 +46,12 @@ class _ExpoloreCategoriesState extends State<ExpoloreCategories> {
                   setState(() {
                     selectedIndex = index;
                   });
+
+                  Navigator.pushNamed(
+                    context,
+                    AppRoutes.serviceCategories,
+                    arguments: item["title"],
+                  );
                 },
                 child: _CategoryItem(
                   title: item["title"]!,

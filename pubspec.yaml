@@ -13,6 +13,8 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   carousel_slider: ^5.1.2
+  flutter_card_swiper: ^7.2.0
+ 
 
 dev_dependencies:
   flutter_test:
@@ -46,10 +48,33 @@ flutter:
     - lib/assets/images/homepage_banner_dummy_image.png
     - lib/assets/images/homepage_banner_dummy_image2.png
     - lib/assets/images/homepage_banner_dummy_image3.png
-    - lib\assets\images\explore_category1.png
-    - lib\assets\images\explore_category2.png
-    - lib\assets\images\explore_category3.png
-    - lib\assets\images\explore_category4.png
+    - lib/assets/images/explore_category1.png
+    - lib/assets/images/explore_category2.png
+    - lib/assets/images/explore_category3.png
+    - lib/assets/images/explore_category4.png
+    - lib/assets/images/trustful_section_image1.webp
+    - lib/assets/images/trustful_section_image2.webp
+    - lib/assets/images/trustful_section_image3.webp
+    - lib/assets/images/refer_section.webp
+    # cleaning
+    - lib/assets/images/cleaning_bathroom.png
+    - lib/assets/images/cleaning_full_house.png
+    - lib/assets/images/cleaning_kitchan.png
+    - lib/assets/images/cleaning_living_room.png
+    # electrical
+    - lib/assets/images/electrical_fan.png
+    - lib/assets/images/electrical_swicth.png
+    - lib/assets/images/electrical_wireing.png
+    - lib/assets/images/electrical_inverter.png
+    - lib/assets/images/electrical_light.png
+    - lib/assets/images/electrical_doorbell.png
+    - lib/assets/images/electrical_appliences.png
+    - lib/assets/images/electrical_book_consulting.png
+    # pest control
+    - lib/assets/images/cockroach_control.png
+    - lib/assets/images/beg_bugs_control.png
+    - lib/assets/images/termite_control.png
+
 
   fonts:
   - family: Inter

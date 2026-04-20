@@ -1,217 +1,282 @@
-import 'package:card_swiper/card_swiper.dart';
+import 'package:flutter/material.dart';
 import 'package:zeerah/core/common/app_exports.dart';
 
-class ExploreCategoryStack extends StatefulWidget {
-  const ExploreCategoryStack({super.key});
+class ExpolreCategoriesStack extends StatelessWidget {
+  const ExpolreCategoriesStack({super.key});
 
-  @override
-  State<ExploreCategoryStack> createState() => _ExploreCategoryStackState();
-}
-
-class _ExploreCategoryStackState extends State<ExploreCategoryStack> {
-  final List<String> images = [
+  static const List<String> images = [
     UserMessages.exploreCategory1,
     UserMessages.exploreCategory2,
     UserMessages.exploreCategory3,
     UserMessages.exploreCategory4,
   ];
 
-  final SwiperController _swiperController = SwiperController();
-  int currentIndex = 0;
-  int _leftPanelIndex = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+      
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.45,
+          child: EditorPickCarousel(images: images),
+        ),
+        const SizedBox(height: 12),
+      ],
+    );
+  }
+}
+
+class EditorPickCarousel extends StatefulWidget {
+  final List<String> images;
+  const EditorPickCarousel({super.key, required this.images});
+
+  @override
+  State<EditorPickCarousel> createState() => _EditorPickCarouselState();
+}
+
+class _EditorPickCarouselState extends State<EditorPickCarousel> {
+  late final PageController _controller;
+  late final int _baseOffset;
+
+  // Tuning knobs for the stack depth effect.
+  static const double _stackScaleStep = 0.07;
+  static const double _stackXStep = 44.0;
+  static const double _stackOpacityStep = 0.32;
+  static const double _leftPeekFraction = 1.08;
 
   @override
   void initState() {
     super.initState();
-    _leftPanelIndex = (images.length - 1) % images.length;
+    _baseOffset = 1000 * widget.images.length;
+    _controller = PageController(
+      viewportFraction: 1.0,
+      initialPage: _baseOffset,
+    );
   }
 
   @override
   void dispose() {
-    _swiperController.dispose();
+    _controller.dispose();
     super.dispose();
+  }
+
+  double get _page {
+    if (!_controller.hasClients) {
+      return _controller.initialPage.toDouble();
+    }
+    final pos = _controller.position;
+    if (!pos.hasPixels || !pos.hasContentDimensions) {
+      return _controller.initialPage.toDouble();
+    }
+    return _controller.page ?? _controller.initialPage.toDouble();
   }
 
   @override
   Widget build(BuildContext context) {
-    const double cardHeight = 320;
-    const double cardWidth = 220;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final w = constraints.maxWidth;
+        final h = constraints.maxHeight;
 
-    return SizedBox(
-      height: cardHeight,
-      child: Stack(
-        children: [
-          /// LEFT SIDE PEEK IMAGE
-          Positioned(
-            left: 0,
-            top: 0,
-            bottom: 0,
-            child: SizedBox(
-              width: AppSizes.w(context, 35),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
+        final cardWidth = w * 0.74;
+        final cardHeight = (h - 40).clamp(0.0, cardWidth * 1.55);
+
+        return Stack(
+          children: [
+            // Gesture surface
+            Positioned.fill(
+              child: PageView.builder(
+                controller: _controller,
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
                 ),
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  switchInCurve: Curves.easeInOut,
-                  switchOutCurve: Curves.easeInOut,
-                  layoutBuilder: (currentChild, previousChildren) {
-                    return Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        ...previousChildren,
-                        if (currentChild != null) currentChild,
-                      ],
+                itemBuilder: (_, __) => const SizedBox.expand(),
+              ),
+            ),
+
+            // Visual layer
+            Positioned.fill(
+              child: IgnorePointer(
+                child: AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, _) {
+                    return _buildStackedCards(
+                      page: _page,
+                      cardWidth: cardWidth,
+                      cardHeight: cardHeight,
                     );
                   },
-                  transitionBuilder: (child, animation) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    );
-                  },
-                  child: SizedBox.expand(
-                    key: ValueKey(_leftPanelIndex),
-                    child: Image.asset(
-                      images[_leftPanelIndex],
-                      fit: BoxFit.cover,
-                      filterQuality: FilterQuality.high,
-                    ),
-                  ),
                 ),
               ),
             ),
-          ),
+          ],
+        );
+      },
+    );
+  }
 
-          /// SWIPER CARDS
-          Padding(
-            padding: EdgeInsets.only(left: AppSizes.w(context, 25)),
-            child: Swiper(
-              controller: _swiperController,
-              itemCount: images.length,
-              itemWidth: cardWidth,
-              itemHeight: cardHeight,
-              layout: SwiperLayout.STACK,
-              axisDirection: AxisDirection.right,
-              loop: true,
-              scale: 0.92,
-              fade: 0.2,
-              onIndexChanged: (index) {
-                final next = index % images.length;
-                setState(() {
-                  currentIndex = next;
-                  _leftPanelIndex =
-                      (next - 1 + images.length) % images.length;
-                });
-              },
-              itemBuilder: (context, index) =>
-                  _card(context, index, cardWidth, cardHeight),
-            ),
+  Widget _buildStackedCards({
+    required double page,
+    required double cardWidth,
+    required double cardHeight,
+  }) {
+    final entries = <_RenderEntry>[];
+    final n = widget.images.length;
+    final centerV = page.floor();
+    
+    for (var offset = -2; offset <= 4; offset++) {
+      final vi = centerV + offset;
+      final delta = vi - page;
+      if (delta < -1.2 || delta > 3.2) continue;
+      final realIndex = ((vi % n) + n) % n;
+      entries.add(_RenderEntry(index: realIndex, delta: delta));
+    }
+
+    entries.sort((a, b) => b.delta.compareTo(a.delta));
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        for (final e in entries)
+          _buildPositionedCard(
+            imageUrl: widget.images[e.index],
+            delta: e.delta,
+            cardWidth: cardWidth,
+            cardHeight: cardHeight,
+          ),
+      ],
+    );
+  }
+
+  Widget _buildPositionedCard({
+    required String imageUrl,
+    required double delta,
+    required double cardWidth,
+    required double cardHeight,
+  }) {
+    late final double scale;
+    late final double xOffset;
+    late final double opacity;
+
+    if (delta >= 0) {
+      final d = delta;
+      scale = (1.0 - _stackScaleStep * d).clamp(0.6, 1.0);
+      xOffset = _stackXStep * d;
+      opacity = (1.0 - _stackOpacityStep * d).clamp(0.0, 1.0);
+    } else {
+      final t = -delta;
+      scale = 1.0;
+      xOffset = -cardWidth * _leftPeekFraction * t;
+      opacity = (1.0 - 0.25 * t).clamp(0.0, 1.0);
+    }
+
+    return Transform.translate(
+      offset: Offset(xOffset, 0),
+      child: Transform.scale(
+        scale: scale,
+        child: Opacity(
+          opacity: opacity,
+          child: SizedBox(
+            width: cardWidth,
+            height: cardHeight,
+            child: _ImageView(imageUrl: imageUrl),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RenderEntry {
+  final int index;
+  final double delta;
+  const _RenderEntry({required this.index, required this.delta});
+}
+
+// Fixed ImageView to handle both asset and network images
+class _ImageView extends StatelessWidget {
+  final String imageUrl;
+  const _ImageView({required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.55),
+            blurRadius: 28,
+            offset: const Offset(0, 14),
           ),
         ],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: _buildImage(),
+    );
+  }
+
+  Widget _buildImage() {
+    // Check if it's a network URL or asset path
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+      return Image.network(
+        imageUrl,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+        errorBuilder: (_, __, ___) => _buildErrorWidget(),
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return _buildLoadingWidget();
+        },
+      );
+    } else {
+      // Asset image
+      return Image.asset(
+        imageUrl,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+        errorBuilder: (_, __, ___) => _buildErrorWidget(),
+     
+      );
+    }
+  }
+
+  Widget _buildErrorWidget() {
+    return Container(
+      color: Colors.grey.shade900,
+      child: const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.image_not_supported_outlined,
+              size: 48,
+              color: Colors.white24,
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Failed to load image',
+              style: TextStyle(
+                color: Colors.white38,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  /// CARD UI
-  Widget _card(
-      BuildContext context, int index, double width, double height) {
-    final bool showBookNow = index == 0;
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(Insets.md),
-      child: SizedBox(
-        width: width,
-        height: height,
-        child: Stack(
-          children: [
-            /// ✅ FIX: FULL IMAGE FILL (NO BLACK GAP)
-            Positioned.fill(
-             
-              child: Image.asset(
-                  scale: 1.02, // 
-                images[index],
-                fit: BoxFit.cover,
-                alignment: Alignment.center,
-                filterQuality: FilterQuality.high,
-              ),
-            ),
-
-            /// OVERLAY
-            Positioned.fill(
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color.fromRGBO(0, 0, 0, 0.3),
-                      Color.fromRGBO(0, 0, 0, 0.3),
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                ),
-              ),
-            ),
-
-            /// BOOK NOW BUTTON
-            if (showBookNow)
-              Positioned(
-                bottom: Insets.xsm,
-                left: Insets.xsm,
-                right: Insets.xsm,
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Insets.xxs,
-                    vertical: Insets.xxs,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color.fromRGBO(255, 255, 255, 0.1),
-                    borderRadius: BorderRadius.circular(Insets.lg),
-                    border: Border.all(
-                      color: AppColors.naturalWhite,
-                      width: 0.5,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(Insets.xxs),
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.darkGray,
-                        ),
-                        child: const Icon(
-                          Icons.delete_outline,
-                          color: AppColors.naturalWhite,
-                        ),
-                      ),
-                      SizedBox(width: Insets.xs),
-                      const Expanded(
-                        child: Text(
-                          UserMessages.bookNow,
-                          style: TextStyle(
-                            color: AppColors.naturalWhite,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 17,
-                          ),
-                        ),
-                      ),
-                      const CircleAvatar(
-                        radius: 14,
-                        backgroundColor: AppColors.naturalBlack,
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          size: 16,
-                          color: AppColors.naturalWhite,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-          ],
+  Widget _buildLoadingWidget() {
+    return Container(
+      color: Colors.grey.shade800,
+      child: const Center(
+        child: CircularProgressIndicator(
+          color: Colors.amber,
+          strokeWidth: 2,
         ),
       ),
     );

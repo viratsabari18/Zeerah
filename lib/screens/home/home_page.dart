@@ -1,12 +1,12 @@
-
 import 'package:zeerah/core/common/app_exports.dart';
 import 'package:zeerah/screens/home/expolore_categories.dart';
 import 'package:zeerah/screens/home/expolre_categories_stack.dart';
 
 import 'package:zeerah/screens/home/home_offer_section.dart';
 import 'package:zeerah/screens/home/home_top_banner.dart';
+import 'package:zeerah/screens/home/refer_section.dart';
+import 'package:zeerah/screens/home/reliable_and_trustworthy_section.dart';
 import 'package:zeerah/screens/home/seracbox.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,10 +37,17 @@ class _HomePageState extends State<HomePage> {
             ),
             const SliverToBoxAdapter(child: SearchBox()),
             const SliverToBoxAdapter(child: ExpoloreCategories()),
-            const SliverToBoxAdapter(child: ExploreCategoryStack()),
+        SliverToBoxAdapter(
+  child:ExpolreCategoriesStack   (),
+),
+
             SliverToBoxAdapter(
-              child: Padding(padding: EdgeInsets.only(bottom: AppSizes.h(context, 40))),
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: Insets.sm),
+              ),
             ),
+            SliverToBoxAdapter(child: ReliableAndTrustworthySection()),
+            SliverToBoxAdapter(child: ReferSection()),
           ],
         ),
       ),
