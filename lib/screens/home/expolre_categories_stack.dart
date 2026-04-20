@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:zeerah/core/common/app_exports.dart';
 
@@ -197,7 +199,10 @@ class _RenderEntry {
 // Fixed ImageView to handle both asset and network images
 class _ImageView extends StatelessWidget {
   final String imageUrl;
-  const _ImageView({required this.imageUrl});
+  
+  const _ImageView({
+    required this.imageUrl, 
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +218,92 @@ class _ImageView extends StatelessWidget {
         ],
       ),
       clipBehavior: Clip.antiAlias,
-      child: _buildImage(),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Image
+          _buildImage(),
+          
+          // Gradient overlay rgba(0, 0, 0, 0.3)
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  Colors.black.withOpacity(0.3),
+                ],
+                stops: const [0.7, 1.0],
+              ),
+            ),
+          ),
+          
+          // BOOK NOW BUTTON (ONLY FIRST IMAGE) - with blur effect
+          Positioned(
+            bottom: 12,
+            left: 12,
+            right: 12,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(255, 255, 255, 0.1),
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 0.5,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xFF4D4D4D),
+                        ),
+                        child: const Icon(
+                          Icons.delete_outline,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      const Expanded(
+                        child: Text(
+                          "Book Now",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 28,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.black,
+                        ),
+                        child: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 14,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -225,11 +315,7 @@ class _ImageView extends StatelessWidget {
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
-        errorBuilder: (_, __, ___) => _buildErrorWidget(),
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) return child;
-          return _buildLoadingWidget();
-        },
+       
       );
     } else {
       // Asset image
@@ -238,47 +324,11 @@ class _ImageView extends StatelessWidget {
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
-        errorBuilder: (_, __, ___) => _buildErrorWidget(),
-     
+       
       );
     }
   }
 
-  Widget _buildErrorWidget() {
-    return Container(
-      color: Colors.grey.shade900,
-      child: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.image_not_supported_outlined,
-              size: 48,
-              color: Colors.white24,
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Failed to load image',
-              style: TextStyle(
-                color: Colors.white38,
-                fontSize: 12,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
-  Widget _buildLoadingWidget() {
-    return Container(
-      color: Colors.grey.shade800,
-      child: const Center(
-        child: CircularProgressIndicator(
-          color: Colors.amber,
-          strokeWidth: 2,
-        ),
-      ),
-    );
+
   }
-}

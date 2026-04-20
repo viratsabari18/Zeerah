@@ -37,15 +37,8 @@ class _HomePageState extends State<HomePage> {
             ),
             const SliverToBoxAdapter(child: SearchBox()),
             const SliverToBoxAdapter(child: ExpoloreCategories()),
-        SliverToBoxAdapter(
-  child:ExpolreCategoriesStack   (),
-),
+            SliverToBoxAdapter(child: ExpolreCategoriesStack()),
 
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: Insets.sm),
-              ),
-            ),
             SliverToBoxAdapter(child: ReliableAndTrustworthySection()),
             SliverToBoxAdapter(child: ReferSection()),
           ],

@@ -13,14 +13,17 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   carousel_slider: ^5.1.2
-  flutter_card_swiper: ^7.2.0
+  intl: ^0.20.1
+  geolocator: ^14.0.1
+  geocoding: ^4.0.0
+  google_maps_flutter: ^2.5.0
+
  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^6.0.0
   card_swiper: ^3.0.1
 flutter:
   uses-material-design: true
@@ -74,6 +77,13 @@ flutter:
     - lib/assets/images/cockroach_control.png
     - lib/assets/images/beg_bugs_control.png
     - lib/assets/images/termite_control.png
+
+    #Service booking
+
+    - lib/assets/images/service_booking_dummy_image1.webp
+    - lib/assets/images/service_booking_dummy_image2.webp
+    - lib/assets/images/service_booking_dummy_image3.webp
+    - lib/assets/images/bookings__coins.png
 
 
   fonts:

@@ -39,6 +39,56 @@ class UserMessages {
   static const String bookNow = "Book Now";
   static const String searchForService = "Search for service";
 
+  // Add to UserMessages class in app_exports.dart
+static const String priceDetail = "Price Detail";
+static const String price = "Price";
+static const String discount = "Discount (4% off)";
+static const String subtotal = "Subtotal";
+static const String tax = "Tax";
+static const String totalAmount = "Total Amount";
+static const String disclaimerTitle = "Disclaimer";
+static const String disclaimerText = "You will be asked for payment once your booking is completed.";
+static const String completeBookingEarn = "Complete this booking to earn ";
+static const String loyaltyPoints20 = "20\nloyalty points";
+static const String redeemPointsText = "Redeem points on your next booking discounts!";
+static const String bookingsCoins = "lib/assets/images/bookings__coins.png";
+
+// Add to UserMessages class in app_exports.dart
+static const String selectDateTime = "Select Date & Time";
+static const String choosePreferredSchedule = "Choose your preferred schedule";
+static const String morning = "Morning";
+static const String afternoon = "Afternoon";
+static const String evening = "Evening";
+static const String availableTimeSlots = "Available Time Slots";
+static const String selected = "Selected";
+static const List<String> weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+static const List<String> timeSlotsCategory = ["Morning", "Afternoon", "Evening"];
+// Add to UserMessages class in app_exports.dart
+static const String regularWash = "Regular Wash";
+static const String standardWashing = "Standard washing";
+static const String washAndIron = "Wash & Iron";
+static const String washDryClean = "Wash, dry & clean";
+static const String dryCleaning = "Dry Cleaning";
+static const String professionalCleaning = "Professional Cleaning";
+static const String serviceType = "Service Type";
+static const String yourAddress = "Your Address";
+static const String enterYourAddress = "Enter your address";
+static const String chooseFromMap = "Choose From Map";
+static const String useCurrentLocation = "Use Current Location";
+static const String descriptionTitle = "Description";
+static const String enterDescription = "Enter Description";
+static const String locationServicesDisabled = "Location services are disabled. Please enable them.";
+static const String locationPermissionDenied = "Location permission denied.";
+static const String locationPermissionPermanentlyDenied = "Location permissions are permanently denied.";
+static const String gettingYourLocation = "Getting your location...";
+static const String locationUpdatedSuccessfully = "Location updated successfully!";
+static const String errorGettingLocation = "Error getting location:";
+
+// Service images
+static const String serviceBookingDummy1 = "lib/assets/images/service_booking_dummy_image1.webp";
+static const String serviceBookingDummy2 = "lib/assets/images/service_booking_dummy_image2.webp";
+static const String serviceBookingDummy3 = "lib/assets/images/service_booking_dummy_image3.webp";
+
   static const String veriflyOtpImage = "lib/assets/images/otp_verifly.webp";
   static const String signInImage = "lib/assets/images/sign_in.webp";
   static const String signInWithGoogleImage = "lib/assets/images/google_sign.webp";
