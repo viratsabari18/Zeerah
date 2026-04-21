@@ -23,10 +23,12 @@ class AppPages {
       return ServiceCetagorices(title: title);
     },
 
-    AppRoutes.serviceBookings:(context)=>BookingHomePage(),
-    AppRoutes.serviceInProgress:(context)=>  ServiceInProgress(serviceDuration: 10,),
-    AppRoutes.bookingServiceProgressHomePage:(context)=>BookingServiceProgressHome( serviceDurationInSeconds: 10,),
-    AppRoutes.paymentsHomePage:(context)=>PaymentsHomePage(),
-    AppRoutes.paymentsHomePage:(context)=>RatingsAndReviewScreen(),
+    AppRoutes.serviceBookings: (context) => BookingHomePage(),
+    AppRoutes.serviceInProgress: (context) =>
+        ServiceInProgress(serviceDuration: 10),
+    AppRoutes.bookingServiceProgressHomePage: (context) =>
+        BookingServiceProgressHome(serviceDurationInSeconds: 10),
+    AppRoutes.paymentsHomePage: (context) => PaymentsHomePage(),
+    AppRoutes.serviceReviewScreen: (context) => RatingsAndReviewScreen(),
   };
 }
