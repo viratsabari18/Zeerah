@@ -4,7 +4,16 @@ import 'package:zeerah/screens/auth/otp_verification.dart';
 import 'package:zeerah/screens/auth/sign_in_screen.dart';
 import 'package:zeerah/screens/auth/splash_screen.dart';
 import 'package:zeerah/screens/cetagories/service_cetagorices.dart';
+import 'package:zeerah/screens/cetagories/category_details_screen.dart';
 import 'package:zeerah/screens/home/home_page.dart';
+import 'package:zeerah/screens/booking/booking_config_screen.dart';
+import 'package:zeerah/screens/cetagories/service_details_screen.dart';
+import 'package:zeerah/screens/booking_flow/booking_confirmed_screen.dart';
+import 'package:zeerah/screens/booking_flow/booking_status_screen.dart';
+import 'package:zeerah/screens/booking_flow/professional_assigned_screen.dart';
+import 'package:zeerah/screens/booking_flow/service_verification_screen.dart';
+import 'package:zeerah/core/common/app_exports.dart';
+import 'package:zeerah/core/constants/category_data.dart';
 
 class AppPages {
   static Map<String, WidgetBuilder> routes = {
@@ -15,6 +24,37 @@ class AppPages {
     AppRoutes.serviceCategories: (context) {
       final title = ModalRoute.of(context)!.settings.arguments as String;
       return ServiceCetagorices(title: title);
+    },
+    AppRoutes.cleaningServices: (context) {
+      final categoryName = ModalRoute.of(context)!.settings.arguments as String;
+      return CategoryDetailsScreen(categoryName: categoryName);
+    },
+    AppRoutes.bookingConfig: (context) => const BookingConfigScreen(),
+    AppRoutes.serviceDetails: (context) {
+      final service = ModalRoute.of(context)!.settings.arguments as CategoryItem;
+      return ServiceDetailsScreen(service: service);
+    },
+    AppRoutes.bookingConfirmed: (context) {
+      final service = ModalRoute.of(context)!.settings.arguments as CategoryItem;
+      return BookingConfirmedScreen(service: service);
+    },
+    AppRoutes.bookingStatus: (context) {
+      final service = ModalRoute.of(context)!.settings.arguments as CategoryItem;
+      return BookingStatusScreen(service: service);
+    },
+    AppRoutes.professionalAssigned: (context) {
+      final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      return ProfessionalAssignedScreen(
+        service: args['service'] as CategoryItem,
+        bookingStatus: args['status'] as BookingStatusModel,
+      );
+    },
+    AppRoutes.serviceVerification: (context) {
+      final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      return ServiceVerificationScreen(
+        service: args['service'] as CategoryItem,
+        bookingStatus: args['status'] as BookingStatusModel,
+      );
     },
   };
 }

@@ -1,25 +1,19 @@
 import 'package:zeerah/core/common/app_exports.dart';
 
-class ExpoloreCategories extends StatefulWidget {
-  const ExpoloreCategories({super.key});
+class ExpoloreCategories extends StatelessWidget {
+  final int selectedIndex;
+  final ValueChanged<int> onCategorySelected;
 
-  @override
-  State<ExpoloreCategories> createState() => _ExpoloreCategoriesState();
-}
-
-class _ExpoloreCategoriesState extends State<ExpoloreCategories> {
-  int selectedIndex = 0;
-
-  final List<Map<String, String>> categories = [
-    {"title": "Cleaning", "image": UserMessages.cleaning},
-    {"title": "Electrician", "image": UserMessages.electrician},
-    {"title": "Pest\nControl", "image": UserMessages.pestControl},
-    {"title": "Plumber", "image": UserMessages.plumber},
-    {"title": "Appliance\nRepair", "image": UserMessages.applianceRepair},
-  ];
+  const ExpoloreCategories({
+    super.key,
+    required this.selectedIndex,
+    required this.onCategorySelected,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final categories = CategoryData.categories;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -42,17 +36,7 @@ class _ExpoloreCategoriesState extends State<ExpoloreCategories> {
             itemBuilder: (context, index) {
               final item = categories[index];
               return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedIndex = index;
-                  });
-
-                  Navigator.pushNamed(
-                    context,
-                    AppRoutes.serviceCategories,
-                    arguments: item["title"],
-                  );
-                },
+                onTap: () => onCategorySelected(index),
                 child: _CategoryItem(
                   title: item["title"]!,
                   image: item["image"]!,
