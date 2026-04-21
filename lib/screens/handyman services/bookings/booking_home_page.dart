@@ -1,4 +1,3 @@
-
 import 'package:zeerah/core/common/app_exports.dart';
 import 'package:zeerah/screens/handyman%20services/bookings/select_date.dart';
 import 'package:zeerah/screens/handyman%20services/bookings/service_type.dart';
@@ -27,7 +26,10 @@ class _BookingHomePageState extends State<BookingHomePage> {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: const Icon(Icons.arrow_back_ios, color: AppColors.naturalWhite),
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: AppColors.naturalWhite,
+            ),
           ),
         ),
         backgroundColor: AppColors.primaryRed,
@@ -48,11 +50,7 @@ class _BookingHomePageState extends State<BookingHomePage> {
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
-                  children: const [
-                    ServiceType(),
-                    SelectDate(),
-                    PriceDetails(),
-                  ],
+                  children: const [ServiceType(), SelectDate(), PriceDetails()],
                 ),
               ),
             ),
@@ -69,6 +67,7 @@ class _BookingHomePageState extends State<BookingHomePage> {
                 height: AppSizes.h(context, 52),
                 child: ElevatedButton(
                   onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.serviceInProgress);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryRed,

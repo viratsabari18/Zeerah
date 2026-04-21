@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:zeerah/core/common/app_exports.dart';
+
+
+
 
 void main() {
   runApp(const MyApp());
@@ -14,6 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: AppRoutes.splash,
       routes: AppPages.routes,
+    
     );
   }
 }

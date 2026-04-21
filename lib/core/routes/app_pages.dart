@@ -5,6 +5,10 @@ import 'package:zeerah/screens/auth/sign_in_screen.dart';
 import 'package:zeerah/screens/auth/splash_screen.dart';
 import 'package:zeerah/screens/cetagories/service_cetagorices.dart';
 import 'package:zeerah/screens/handyman%20services/bookings/booking_home_page.dart';
+import 'package:zeerah/screens/handyman%20services/bookings/bookig_sevice_progress_home.dart';
+import 'package:zeerah/screens/handyman%20services/bookings/service_in_progess.dart';
+import 'package:zeerah/screens/handyman%20services/payments/payments_home_page.dart';
+import 'package:zeerah/screens/handyman%20services/reviews/ratings_and_review_screen.dart';
 import 'package:zeerah/screens/home/home_page.dart';
 
 class AppPages {
@@ -18,6 +22,10 @@ class AppPages {
       return ServiceCetagorices(title: title);
     },
 
-    // AppRoutes.serviceBookings:(context)=>BookingHomePage()
+    AppRoutes.serviceBookings:(context)=>BookingHomePage(),
+    AppRoutes.serviceInProgress:(context)=>  ServiceInProgress(isCompleted: false,),
+    AppRoutes.bookingServiceProgressHomePage:(context)=>BookingServiceProgressHome(isCompleted: false),
+    AppRoutes.paymentsHomePage:(context)=>PaymentsHomePage(),
+    AppRoutes.paymentsHomePage:(context)=>RatingsAndReviewScreen(),
   };
 }
