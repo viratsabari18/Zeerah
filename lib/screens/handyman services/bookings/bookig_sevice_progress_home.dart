@@ -2,9 +2,12 @@ import 'package:zeerah/core/common/app_exports.dart';
 import 'package:zeerah/screens/handyman%20services/bookings/service_in_progess.dart';
 
 class BookingServiceProgressHome extends StatefulWidget {
-  final bool isCompleted;
-  const BookingServiceProgressHome({Key? key, required this.isCompleted})
-      : super(key: key);
+  final int serviceDurationInSeconds; // Pass duration from first widget
+  
+  const BookingServiceProgressHome({
+    Key? key, 
+    required this.serviceDurationInSeconds
+  }) : super(key: key);
 
   @override
   State<BookingServiceProgressHome> createState() =>
@@ -31,7 +34,7 @@ class _BookingServiceProgressHomeState extends State<BookingServiceProgressHome>
         title: Padding(
           padding: EdgeInsets.only(top: AppSizes.h(context, 18)),
           child: Text(
-            widget.isCompleted ? UserMessages.completeService : UserMessages.serviceInProgress,
+            UserMessages.serviceInProgress,
             style: TextStyle(
               color: AppColors.naturalWhite,
               fontSize: AppSizes.w(context, 20),
@@ -39,7 +42,9 @@ class _BookingServiceProgressHomeState extends State<BookingServiceProgressHome>
           ),
         ),
       ),
-      body: ServiceInProgress(isCompleted: widget.isCompleted),
+      body: ServiceInProgress(
+        serviceDuration: widget.serviceDurationInSeconds, // Pass duration to second widget
+      ),
     );
   }
 }

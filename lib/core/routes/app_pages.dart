@@ -7,6 +7,7 @@ import 'package:zeerah/screens/cetagories/service_cetagorices.dart';
 import 'package:zeerah/screens/handyman%20services/bookings/booking_home_page.dart';
 import 'package:zeerah/screens/handyman%20services/bookings/bookig_sevice_progress_home.dart';
 import 'package:zeerah/screens/handyman%20services/bookings/service_in_progess.dart';
+
 import 'package:zeerah/screens/handyman%20services/payments/payments_home_page.dart';
 import 'package:zeerah/screens/handyman%20services/reviews/ratings_and_review_screen.dart';
 import 'package:zeerah/screens/home/home_page.dart';
@@ -23,8 +24,8 @@ class AppPages {
     },
 
     AppRoutes.serviceBookings:(context)=>BookingHomePage(),
-    AppRoutes.serviceInProgress:(context)=>  ServiceInProgress(isCompleted: false,),
-    AppRoutes.bookingServiceProgressHomePage:(context)=>BookingServiceProgressHome(isCompleted: false),
+    AppRoutes.serviceInProgress:(context)=>  ServiceInProgress(serviceDuration: 10,),
+    AppRoutes.bookingServiceProgressHomePage:(context)=>BookingServiceProgressHome( serviceDurationInSeconds: 10,),
     AppRoutes.paymentsHomePage:(context)=>PaymentsHomePage(),
     AppRoutes.paymentsHomePage:(context)=>RatingsAndReviewScreen(),
   };
