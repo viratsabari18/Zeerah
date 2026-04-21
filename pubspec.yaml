@@ -17,13 +17,14 @@ dependencies:
   google_maps_flutter: ^2.10.0
   geolocator: ^13.0.1
   provider: ^6.1.5+1
- 
+  intl: ^0.20.1
+  geocoding: ^4.0.0
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^6.0.0
   card_swiper: ^3.0.1
 flutter:
   uses-material-design: true
@@ -83,7 +84,27 @@ flutter:
     - lib/assets/images/worker_1.png
     - lib/assets/images/worker_2.png
     - lib/assets/images/rider_image.png
+    - lib/assets/images/man.png
 
+    #Service booking
+
+    - lib/assets/images/service_booking_dummy_image1.webp
+    - lib/assets/images/service_booking_dummy_image2.webp
+    - lib/assets/images/service_booking_dummy_image3.webp
+    - lib/assets/images/bookings__coins.png
+
+    #service progress
+    - lib/assets/images/service_in_progress_image.jpeg
+    - lib/assets/images/service_completed.png
+    - lib/assets/images/progress_clock.png
+
+    #payments images
+    - lib/assets/images/payments_cash_on_delivery.png
+    - lib/assets/images/payments_credit_card.png
+    - lib/assets/images/payments_selceted.png
+    - lib/assets/images/payments_upi.png
+    - lib/assets/images/payments_wallet.png
+    - lib/assets/images/bookings.png
 
   fonts:
   - family: Inter

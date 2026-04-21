@@ -39,8 +39,160 @@ class UserMessages {
   static const String bookNow = "Book Now";
   static const String searchForService = "Search for service";
 
-  static const String veriflyOtpImage = "lib/assets/images/otp_verifly.webp";
+  // Add to UserMessages class in app_exports.dart
+static const String priceDetail = "Price Detail";
+static const String price = "Price";
+static const String discount = "Discount (4% off)";
+static const String subtotal = "Subtotal";
+static const String tax = "Tax";
+static const String totalAmount = "Total Amount";
+static const String disclaimerTitle = "Disclaimer";
+static const String disclaimerText = "You will be asked for payment once your booking is completed.";
+static const String completeBookingEarn = "Complete this booking to earn ";
+static const String loyaltyPoints20 = "20\nloyalty points";
+static const String redeemPointsText = "Redeem points on your next booking discounts!";
+static const String bookingsCoins = "lib/assets/images/bookings__coins.png";
+
+// Add to UserMessages class in app_exports.dart
+static const String selectDateTime = "Select Date & Time";
+static const String choosePreferredSchedule = "Choose your preferred schedule";
+static const String morning = "Morning";
+static const String afternoon = "Afternoon";
+static const String evening = "Evening";
+static const String availableTimeSlots = "Available Time Slots";
+static const String selected = "Selected";
+static const List<String> weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+static const List<String> timeSlotsCategory = ["Morning", "Afternoon", "Evening"];
+// Add to UserMessages class in app_exports.dart
+static const String regularWash = "Regular Wash";
+static const String standardWashing = "Standard washing";
+static const String washAndIron = "Wash & Iron";
+static const String washDryClean = "Wash, dry & clean";
+static const String dryCleaning = "Dry Cleaning";
+static const String professionalCleaning = "Professional Cleaning";
+static const String serviceType = "Service Type";
+static const String yourAddress = "Your Address";
+static const String enterYourAddress = "Enter your address";
+static const String chooseFromMap = "Choose From Map";
+static const String useCurrentLocation = "Use Current Location";
+static const String descriptionTitle = "Description";
+static const String enterDescription = "Enter Description";
+static const String locationServicesDisabled = "Location services are disabled. Please enable them.";
+static const String locationPermissionDenied = "Location permission denied.";
+static const String locationPermissionPermanentlyDenied = "Location permissions are permanently denied.";
+static const String gettingYourLocation = "Getting your location...";
+static const String locationUpdatedSuccessfully = "Location updated successfully!";
+static const String errorGettingLocation = "Error getting location:";
+
+// Add to UserMessages class in app_exports.dart
+static const String rateYourExperience = "Rate Your Experience";
+static const String custom = "Custom";
+static const String bookings = "Bookings";
+static const String home = "Home";
+static const String navigateToBookings = "Navigate to Bookings";
+static const String navigateToHome = "Navigate to Home";
+static const String poorService = "Poor Service!";
+static const String belowAverage = "Below Average!";
+static const String averageService = "Average Service!";
+static const String goodService = "Good Service!";
+static const String excellentService = "Excellent Service!";
+static const String reviewSubmitted = "REVIEW SUBMITTED";
+static const String rating = "Rating";
+static const String review = "Review";
+static const String noReviewWritten = "No review written";
+static const String tipAmount = "Tip Amount";
+static const String customAmount = "Custom amount";
+static const String writeA = "Write a ";
+static const String reviewWord = "review";
+static const String reviewHint = "Share your experience with this professional...";
+static const String tipYourProfessional = "Tip Your Professional";
+static const String submitReview = "Submit Review";
+static const String bookAgain = "Book Again";
+static const String bookAgainTapped = "Book Again tapped";
+static const String profileImageUrl = "https://upload.wikimedia.org/wikipedia/commons/5/5f/Rohit_Sharma_2019.jpg";
+static const String profileName = "Rohit Sharma";
+static const String professionalType = "Cleaning Professional";
+static const String professionalStats = "4.9 | 175 jobs done";
+
+// Service images
+static const String serviceBookingDummy1 = "lib/assets/images/service_booking_dummy_image1.webp";
+static const String serviceBookingDummy2 = "lib/assets/images/service_booking_dummy_image2.webp";
+static const String serviceBookingDummy3 = "lib/assets/images/service_booking_dummy_image3.webp";
+
+// payments
+static const String paymentSummary = "Payment Summary";
+static const String serviceDetails = "Service Details";
+static const String fullHomeCleaning = "Full Home Cleaning";
+static const String serviceDateTime = "26 march,2026 ~ 11:00AM";
+static const String billBreakdown = "Bill Breakdown";
+static const String serviceFee = "Service Fee";
+static const String extraTime = "Extra Time";
+static const String coupon = "Coupon";
+static const String paymentMethod = "Payment Method";
+static const String upi = "UPI";
+static const String creditDebitCard = "Credit / Debit Card";
+static const String wallet = "Wallet";
+static const String cashOnDelivery = "Cash on Delivery";
+static const String card = "CARD";
+static const String walletValue = "WALLET";
+static const String cod = "COD";
+static const String payNow = "Pay Now";
+
+// bookings
+static const String completeService = "Complete Service";
+static const String serviceInProgress = "Service in Progress";
+static const String endOtpCode = "4587";
+static const String endOtpLabel = "END OTP";
+static const String copyOtp = "Copy OTP";
+static const String shareThis = "Share this ";
+static const String code = "Code";
+static const String withHandymanTo = " with the handyman to ";
+static const String finish = "finish";
+static const String theJob = " the job";
+static const String rateService = "Rate Service";
+static const String support = "Support";
+static const String pause = "Pause";
+static const String stop = "Stop";
+static const String serviceInProgressImage = "lib/assets/images/service_in_progress_image.jpeg";
+static const String serviceCompletedImage = "lib/assets/images/service_completed.png";
+static const String liveTimer = "LIVE TIMER";
+static const String serviceRunning = "Service Running";
+static const String startedAt = "Started at 11:05AM";
+static const String estimated = "Estimated: ";
+static const String estimatedTime = "3hrs";
+
+static const String serviceComplete = "Service Complete";
+static const String handymanHas = "Handyman has ";
+static const String finished = "finished";
+static const String theService = " the service";
+static const String professionalRating = "⭐ 4.9 (175 jobs done)";
+static const String serviceCompletedText = "Service Completed";
+static const String serviceInProgressText = "Service in Progress";
+static const String completed = "Completed";
+static const String inProgress = "In progress";
+static const String call = "Call";
+static const String chat = "Chat";
+static const String completedLabel = "Completed: ";
+static const String completedTime = "2:40PM";
+static const String stoppageTimeLabel = "Stoppage time: ";
+static const String stoppageTimeValue = "2hr 45mins";
+static const String bookingConfirmed = "Booking confirmed";
+static const String professionalAssigned = "Professional Assigned";
+static const String onTheWay = "On the Way";
+static const String serviceStarted = "Service Started";
+static const String serviceCompleted = "Service Completed";
+static const String serviceProgress = "Service Progress";
+static const String currentlyAtYourService = " (•) Currently at your service";
+
+static const String paymentsSelected = "lib/assets/images/payments_selceted.png";
+static const String paymentsUpi = "lib/assets/images/payments_upi.png";
+static const String paymentsCreditCard = "lib/assets/images/payments_credit_card.png";
+static const String paymentsWallet = "lib/assets/images/payments_wallet.png";
+static const String paymentsCashOnDelivery = "lib/assets/images/payments_cash_on_delivery.png";
+static const String fullHouseCleaningImage = "lib/assets/images/cleaning_full_house.png";
+static const String veriflyOtpImage = "lib/assets/images/otp_verifly.webp";
   static const String signInImage = "lib/assets/images/sign_in.webp";
+  static const String progressClock = "lib/assets/images/progress_clock.png";
   static const String signInWithGoogleImage = "lib/assets/images/google_sign.webp";
   static const String signInWithMailImage = "lib/assets/images/mail_signin.webp";
   static const String splashScreenImage = "lib/assets/images/splash_screen.webp";

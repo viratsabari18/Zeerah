@@ -58,11 +58,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: Insets.sm),
-              ),
-            ),
             SliverToBoxAdapter(child: ReliableAndTrustworthySection()),
             SliverToBoxAdapter(child: ReferSection()),
           ],

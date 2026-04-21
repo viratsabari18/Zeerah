@@ -15,4 +15,40 @@ class AppColors {
   static const Color pinkPurple = Color(0xFFDA0ED0);
   static const Color offerYellow = Color(0xFFFFE14D);
   static const Color darkGray = Color(0xFF4D4D4D);
+
+  static const Color darkGrayText = Color(0xFF1A1A1A);
+  static const Color lightGrayText = Color(0xFF555555);
+  static const Color lighterGrayText = Color(0xFF777777);
+  static const Color discountRed = Color(0xFFD32F2F);
+  static const Color softPeachBg = Color(0xFFF4DAD6);
+
+static const Color calendarBg = Color(0xFFFDF1E6);
+
+static const Color selectedServiceBg = Color.fromRGBO(232, 202, 220, 1);
+static const Color tickColor = Color.fromRGBO(150, 0, 87, 1);
+
+static const Color reviewBgColor = Color(0xFFF4F4F4);
+static const Color starColor = Colors.amber;
+static const Color reviewGreen = Color(0xFF64906F);
+static const Color submitButtonColor = Color(0xFFFFB300);
+
+static const Color paymentBgColor = Color(0xFFF4F4F4);
+static const Color selectedPaymentBg = Color.fromRGBO(253, 202, 202, 1);
+static const Color billGreen = Color(0xFF64906F);
+static const Color payButtonColor = Color(0xFFFFB300);
+
+static const Color endOtpBgColor = Color(0xFFF2F2F2);
+static const Color endOtpCardRed = Color(0xFFF55353);
+static const Color endOtpCopyButtonColor = Color(0xFFE53935);
+static const Color naturalBlack12 = Color(0x1F000000);
+static const Color naturalBlack26 = Color(0x42000000);
+
+static const Color naturalBlack54 = Color(0x8A000000);
+static const Color pauseBlue = Colors.blue;
+static const Color completedBlue = Color(0xFF5483FC);
+static const Color progressGreen = Color(0xFF54FC81);
+
+static const Color progressYellow = Color(0xFFFFBC0D);
+static const Color progressBgColor = Color(0xFFFEDD85);
+static const Color naturalBlack45 = Color(0x73000000);
 }

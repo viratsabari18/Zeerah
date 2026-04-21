@@ -7,7 +7,9 @@ class CategoryDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<CategoryItem> services = CategoryData.getItemsForCategory(categoryName);
+    // Robust matching: trim and replace newlines to ensure we match the keys in categoryMap
+    final String cleanKey = categoryName.trim();
+    final List<CategoryItem> services = CategoryData.getItemsForCategory(cleanKey);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF9F9F4), // Creamy background from image
@@ -34,7 +36,7 @@ class CategoryDetailsScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          categoryName.replaceAll('\n', ' '), // Clean up any newline characters
+          categoryName.replaceAll('\n', ' '), // Clean up any newline characters for display
           style: const TextStyle(
             color: Colors.black87,
             fontWeight: FontWeight.bold,
@@ -62,15 +64,17 @@ class CategoryDetailsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.separated(
-        padding: const EdgeInsets.all(20),
-        itemCount: services.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 16),
-        itemBuilder: (context, index) {
-          final service = services[index];
-          return _ServiceCard(item: service);
-        },
-      ),
+      body: services.isEmpty 
+        ? const Center(child: Text("No services found for this category"))
+        : ListView.separated(
+            padding: const EdgeInsets.all(20),
+            itemCount: services.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 16),
+            itemBuilder: (context, index) {
+              final service = services[index];
+              return _ServiceCard(item: service);
+            },
+          ),
     );
   }
 }
@@ -98,13 +102,11 @@ class _ServiceCard extends StatelessWidget {
               Container(
                 width: 130,
                 height: 110,
+                clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(22),
-                  image: DecorationImage(
-                    image: AssetImage(item.image),
-                    fit: BoxFit.cover,
-                  ),
                 ),
+                child: _buildImage(),
               ),
               const SizedBox(height: 8),
               GestureDetector(
@@ -192,7 +194,7 @@ class _ServiceCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '\$${item.price}',
+                      '₹${item.price}',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -202,7 +204,11 @@ class _ServiceCard extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         HapticFeedback.lightImpact();
-                        Navigator.pushNamed(context, AppRoutes.bookingConfig);
+                        Navigator.pushNamed(
+                          context, 
+                          AppRoutes.bookingConfig,
+                          arguments: item,
+                        );
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -228,5 +234,22 @@ class _ServiceCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildImage() {
+    final String imagePath = item.image;
+    if (imagePath.startsWith('http')) {
+      return Image.network(
+        imagePath,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image, color: Colors.black26)),
+      );
+    } else {
+      return Image.asset(
+        imagePath,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image, color: Colors.black26)),
+      );
+    }
   }
 }

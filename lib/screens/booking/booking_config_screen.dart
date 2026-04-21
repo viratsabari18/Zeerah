@@ -1,7 +1,8 @@
 import 'package:zeerah/core/common/app_exports.dart';
 
 class BookingConfigScreen extends StatefulWidget {
-  const BookingConfigScreen({super.key});
+  final CategoryItem service;
+  const BookingConfigScreen({required this.service, super.key});
 
   @override
   State<BookingConfigScreen> createState() => _BookingConfigScreenState();
@@ -258,7 +259,11 @@ class _BookingConfigScreenState extends State<BookingConfigScreen> {
             GestureDetector(
               onTap: () {
                 HapticFeedback.mediumImpact();
-                // Proceed to next step
+                Navigator.pushNamed(
+                  context,
+                  AppRoutes.bookingHomePage,
+                  arguments: widget.service,
+                );
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),

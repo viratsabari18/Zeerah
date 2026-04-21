@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter/services.dart';
@@ -207,8 +209,6 @@ class _ImageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Wrap EVERYTHING that shouldn't block swipes in IgnorePointer
-        // Including the shadows and decoration!
         IgnorePointer(
           ignoring: true,
           child: Container(
@@ -216,28 +216,21 @@ class _ImageView extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.55),
-                  blurRadius: 28,
-                  offset: const Offset(0, 14),
+                  color: Colors.black.withOpacity(0.15),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
                 ),
               ],
             ),
             clipBehavior: Clip.antiAlias,
-            child: Stack(
-              children: [
-                Positioned.fill(child: _buildImage()),
-              ],
-            ),
+            child: Positioned.fill(child: _buildImage()),
           ),
         ),
-
-        // Keep the button OUTSIDE the IgnorePointer and OUTSIDE the decorated container
-        // to ensure it receives hits and isn't clipped by the parent's anti-alias
         Positioned(
           left: 10,
           right: 10,
           bottom: 12,
-          child: _BookNowButton(categoryName: categoryName),
+          child: _BookNowButton(item: item, categoryName: categoryName),
         ),
       ],
     );
@@ -245,7 +238,6 @@ class _ImageView extends StatelessWidget {
 
   Widget _buildImage() {
     final imageUrl = item.image;
-    // Check if it's a network URL or asset path
     if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
       return Image.network(
         imageUrl,
@@ -259,14 +251,12 @@ class _ImageView extends StatelessWidget {
         },
       );
     } else {
-      // Asset image
       return Image.asset(
         imageUrl,
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
         errorBuilder: (_, __, ___) => _buildErrorWidget(),
-     
       );
     }
   }
@@ -278,19 +268,9 @@ class _ImageView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.image_not_supported_outlined,
-              size: 48,
-              color: Colors.white24,
-            ),
+            Icon(Icons.image_not_supported_outlined, size: 48, color: Colors.white24),
             SizedBox(height: 8),
-            Text(
-              'Failed to load image',
-              style: TextStyle(
-                color: Colors.white38,
-                fontSize: 12,
-              ),
-            ),
+            Text('Failed to load image', style: TextStyle(color: Colors.white38, fontSize: 12)),
           ],
         ),
       ),
@@ -301,18 +281,16 @@ class _ImageView extends StatelessWidget {
     return Container(
       color: Colors.grey.shade800,
       child: const Center(
-        child: CircularProgressIndicator(
-          color: Colors.amber,
-          strokeWidth: 2,
-        ),
+        child: CircularProgressIndicator(color: Colors.amber, strokeWidth: 2),
       ),
     );
   }
 }
 
 class _BookNowButton extends StatefulWidget {
+  final CategoryItem item;
   final String categoryName;
-  const _BookNowButton({required this.categoryName});
+  const _BookNowButton({required this.item, required this.categoryName});
 
   @override
   State<_BookNowButton> createState() => _BookNowButtonState();
@@ -320,7 +298,6 @@ class _BookNowButton extends StatefulWidget {
 
 class _BookNowButtonState extends State<_BookNowButton> {
   double _dragOffset = 0;
-  final double _swipeCompleteThreshold = 200.0;
 
   void _onDragUpdate(DragUpdateDetails details, double maxWidth) {
     setState(() {
@@ -329,23 +306,23 @@ class _BookNowButtonState extends State<_BookNowButton> {
   }
 
   void _onDragEnd(DragEndDetails details, double maxWidth) {
-    if (_dragOffset >= maxWidth - 100) {
-      // Complete swipe
-      HapticFeedback.heavyImpact();
+    // Lower threshold to 70% of max width for easier activation
+    if (_dragOffset >= (maxWidth - 60) * 0.7) {
+      // Haptic feedback first
+      HapticFeedback.mediumImpact();
       
-      // Navigate to the dynamic details screen, passing the category name as the argument
+      // Eager reset so it doesn't look "stuck" during transition
+      final String capturedCategory = widget.categoryName;
+      setState(() => _dragOffset = 0);
+      
+      // Navigate to the Category Details List (as shown in user's screenshot 160935)
       Navigator.pushNamed(
         context, 
         AppRoutes.cleaningServices, 
-        arguments: widget.categoryName,
+        arguments: capturedCategory,
       );
-      
-      // Reset after a delay
-      Future.delayed(const Duration(milliseconds: 500), () {
-        if (mounted) setState(() => _dragOffset = 0);
-      });
     } else {
-      // Snap back
+      // Snap back if threshold wasn't met
       setState(() => _dragOffset = 0);
     }
   }
@@ -355,7 +332,6 @@ class _BookNowButtonState extends State<_BookNowButton> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final totalWidth = constraints.maxWidth;
-        
         return ClipRRect(
           borderRadius: BorderRadius.circular(100),
           child: BackdropFilter(
@@ -365,74 +341,38 @@ class _BookNowButtonState extends State<_BookNowButton> {
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
-                border: Border.all(
-                  color: Colors.white.withOpacity(0.2),
-                  width: 1,
-                ),
+                border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
                 gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [
-                    const Color(0xFFC0A040).withOpacity(0.3), // Goldish tint
-                    const Color(0xFF408080).withOpacity(0.3), // Tealish tint
-                  ],
+                  colors: [const Color(0xFFC0A040).withOpacity(0.3), const Color(0xFF408080).withOpacity(0.3)],
                 ),
               ),
               child: Stack(
                 children: [
-                  // Center Text
                   Center(
                     child: Opacity(
                       opacity: (1 - (_dragOffset / (totalWidth - 60))).clamp(0.2, 1.0),
-                      child: const Text(
-                        'Book Now',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
+                      child: const Text('Book Now', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
                     ),
                   ),
-                  
-                  // Left Static Icon (optional, per design you showed, it's stationary)
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
                       width: 52,
                       height: 52,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white.withOpacity(0.15),
-                      ),
-                      child: const Icon(
-                        Icons.delete_outline,
-                        color: Colors.white,
-                        size: 24,
-                      ),
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white.withOpacity(0.15)),
+                      child: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 20),
                     ),
                   ),
-
-                  // Swipable Arrow Button
                   Positioned(
                     left: _dragOffset,
                     child: GestureDetector(
                       onHorizontalDragUpdate: (d) => _onDragUpdate(d, totalWidth),
                       onHorizontalDragEnd: (d) => _onDragEnd(d, totalWidth),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 100),
+                      child: Container(
                         width: 52,
                         height: 52,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0xFF131B1B), // Dark circular background for arrow
-                        ),
-                        child: const Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.white,
-                          size: 20,
-                        ),
+                        decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFF131B1B)),
+                        child: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 20),
                       ),
                     ),
                   ),

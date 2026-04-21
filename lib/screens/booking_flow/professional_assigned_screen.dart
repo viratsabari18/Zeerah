@@ -41,9 +41,12 @@ class _ProfessionalAssignedScreenState extends State<ProfessionalAssignedScreen>
   }
 
   Future<void> _initializeTracking() async {
-    await _determinePosition();
-    await _loadCustomIcons();
-    _startMovementSimulation();
+    _generateRoadSnappedRoute(); // Populate initial route with fallback coords
+    _startMovementSimulation(); // Start moving immediately
+    
+    // Background tasks that shouldn't block the visual simulation
+    _loadCustomIcons();
+    _determinePosition(); 
   }
 
   Future<void> _determinePosition() async {
@@ -126,10 +129,16 @@ class _ProfessionalAssignedScreenState extends State<ProfessionalAssignedScreen>
   }
 
   Future<void> _loadCustomIcons() async {
-    final Uint8List markerIcon = await _getBytesFromAsset('lib/assets/images/car.png', 80); // Using car.png resized to 80px
-    setState(() {
-      _carIcon = BitmapDescriptor.fromBytes(markerIcon);
-    });
+    try {
+      final Uint8List markerIcon = await _getBytesFromAsset('lib/assets/images/rider_car.png', 100); 
+      if (mounted) {
+        setState(() {
+          _carIcon = BitmapDescriptor.fromBytes(markerIcon);
+        });
+      }
+    } catch (e) {
+      // Fallback already handled in build
+    }
   }
 
   void _startMovementSimulation() {

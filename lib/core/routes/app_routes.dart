@@ -4,11 +4,13 @@ class AppRoutes {
   static const otpVerifly = '/otpverifly';
   static const homePage = '/homepage';
   static const serviceCategories = '/serviceCategories';
-  static const cleaningServices = '/cleaningServices';
-  static const bookingConfig = '/bookingConfig';
-  static const serviceDetails = '/serviceDetails';
-  static const bookingConfirmed = '/bookingConfirmed';
-  static const bookingStatus = '/bookingStatus';
+  static const String cleaningServices = '/cleaningServices';
+  static const String bookingConfig = '/bookingConfig';
+  static const String serviceDetails = '/serviceDetails';
+  static const String bookingConfirmed = '/bookingConfirmed';
+  static const String bookingStatus = '/bookingStatus';
   static const String professionalAssigned = '/professionalAssigned';
   static const String serviceVerification = '/serviceVerification';
+  static const String bookingHomePage = '/bookingHomePage';
+  static const String serviceInProgress = '/serviceInProgress';
 }
