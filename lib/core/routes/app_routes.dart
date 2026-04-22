@@ -13,4 +13,9 @@ class AppRoutes {
   static const String serviceVerification = '/serviceVerification';
   static const String bookingHomePage = '/bookingHomePage';
   static const String serviceInProgress = '/serviceInProgress';
+  static const String profile = '/profile';
+  static const String walletHistory = '/walletHistory';
+  static const String helpDesk = '/helpDesk';
+  static const String messages = '/messages';
+  static const String referral = '/referral';
 }

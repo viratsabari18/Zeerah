@@ -165,16 +165,19 @@ class _HomeTopBannerState extends State<HomeTopBanner> {
                         ),
                       ),
                       SizedBox(width: Insets.xxs),
-                      Container(
-                        padding: EdgeInsets.all(Insets.xxs),
-                        decoration: const BoxDecoration(
-                          color: AppColors.primaryRed,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.person,
-                          color: AppColors.naturalWhite,
-                          size: 18,
+                      GestureDetector(
+                        onTap: () => Navigator.pushNamed(context, AppRoutes.profile),
+                        child: Container(
+                          padding: EdgeInsets.all(Insets.xxs),
+                          decoration: const BoxDecoration(
+                            color: AppColors.primaryRed,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.person,
+                            color: AppColors.naturalWhite,
+                            size: 18,
+                          ),
                         ),
                       ),
                     ],

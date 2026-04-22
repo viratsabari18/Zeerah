@@ -1,0 +1,341 @@
+import 'package:google_fonts/google_fonts.dart';
+import 'package:zeerah/core/common/app_exports.dart';
+import 'package:zeerah/core/models/user_model.dart';
+
+class ProfileScreen extends StatefulWidget {
+  final UserModel user;
+  const ProfileScreen({super.key, required this.user});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  late double _currentWallet;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentWallet = widget.user.walletBalance;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8F9FA),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          'Profile',
+          style: GoogleFonts.poppins(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            _buildTopProfileCard(context),
+            const SizedBox(height: 20),
+            _buildMenuSection(
+              context,
+              title: 'General',
+              items: [
+                _ProfileMenuItem(
+                  icon: Icons.account_balance_wallet_outlined,
+                  title: 'Wallet History',
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    AppRoutes.walletHistory,
+                    arguments: widget.user,
+                  ),
+                ),
+                _ProfileMenuItem(
+                  icon: Icons.favorite_border_outlined,
+                  title: 'Favourite Services',
+                  onTap: () {},
+                ),
+                _ProfileMenuItem(
+                  icon: Icons.person_outline,
+                  title: 'Favourite Provider',
+                  onTap: () {},
+                ),
+                _ProfileMenuItem(
+                  icon: Icons.person_outline,
+                  title: 'Referral & Loyalty',
+                  onTap: () async {
+                    final result = await Navigator.pushNamed(
+                      context,
+                      AppRoutes.referral,
+                      arguments: widget.user,
+                    );
+
+                    if (result != null && result is Map<String, dynamic>) {
+                      setState(() {
+                        _currentWallet = result['newWallet'] ?? _currentWallet;
+                      });
+                    }
+                  },
+                ),
+                _ProfileMenuItem(
+                  icon: Icons.star_border_outlined,
+                  title: 'Rate Us',
+                  onTap: () {},
+                ),
+                _ProfileMenuItem(
+                  icon: Icons.message_outlined,
+                  title: 'My reviews',
+                  onTap: () {},
+                ),
+                _ProfileMenuItem(
+                  icon: Icons.help_outline,
+                  title: 'Help Desk',
+                  onTap: () => Navigator.pushNamed(context, AppRoutes.helpDesk),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            _buildMenuSection(
+              context,
+              title: 'About App',
+              items: [
+                _ProfileMenuItem(
+                  icon: Icons.phone_outlined,
+                  title: 'Helpline Number',
+                  onTap: () {},
+                ),
+              ],
+            ),
+            const SizedBox(height: 30),
+            _buildLogoutButton(context),
+            const SizedBox(height: 40),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTopProfileCard(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // Profile Info Section
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: [
+                Container(
+                  width: 70,
+                  height: 70,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: const Color(0xFFEEEEEE), width: 1),
+                    image: DecorationImage(
+                      image: AssetImage(widget.user.profileImage),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.user.name,
+                        style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
+                        widget.user.email,
+                        style: GoogleFonts.poppins(
+                          fontSize: 13,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
+              ],
+            ),
+          ),
+          
+          const Divider(height: 1, color: Color(0xFFEEEEEE), indent: 20, endIndent: 20),
+          
+          // Wallet Section
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFF0ED),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.account_balance_wallet, color: AppColors.primaryRed, size: 24),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    'Wallet Balance',
+                    style: GoogleFonts.poppins(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                Text(
+                  '₹${_currentWallet.toStringAsFixed(0)}',
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primaryRed,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMenuSection(BuildContext context, {required String title, required List<_ProfileMenuItem> items}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 30, bottom: 8),
+          child: Text(
+            title,
+            style: GoogleFonts.poppins(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey[500],
+              letterSpacing: 0.5,
+            ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.03),
+                blurRadius: 15,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Column(
+            children: List.generate(items.length, (index) {
+              final item = items[index];
+              return Column(
+                children: [
+                  ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF8F9FA),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(item.icon, color: AppColors.primaryRed, size: 22),
+                    ),
+                    title: Text(
+                      item.title,
+                      style: GoogleFonts.poppins(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    ),
+                    trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
+                    onTap: item.onTap,
+                  ),
+                  if (index != items.length - 1)
+                    const Divider(height: 1, indent: 70, endIndent: 20, color: Color(0xFFEEEEEE)),
+                ],
+              );
+            }),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLogoutButton(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white,
+          foregroundColor: AppColors.primaryRed,
+          elevation: 0,
+          side: const BorderSide(color: Color(0xFFEEEEEE)),
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.logout, size: 20),
+            const SizedBox(width: 10),
+            Text(
+              'Logout',
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ProfileMenuItem {
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+
+  _ProfileMenuItem({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
+}
