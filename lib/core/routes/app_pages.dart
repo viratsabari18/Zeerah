@@ -14,6 +14,7 @@ import 'package:zeerah/screens/booking_flow/professional_assigned_screen.dart';
 import 'package:zeerah/screens/booking_flow/service_verification_screen.dart';
 import 'package:zeerah/screens/handyman%20services/bookings/booking_home_page.dart';
 import 'package:zeerah/screens/handyman%20services/bookings/bookig_sevice_progress_home.dart';
+import 'package:zeerah/screens/landing/landing_screen.dart';
 import 'package:zeerah/screens/profile/profile_screen.dart';
 import 'package:zeerah/screens/profile/wallet_history_screen.dart';
 import 'package:zeerah/screens/profile/help_desk_screen.dart';
@@ -29,6 +30,7 @@ class AppPages {
   static Map<String, WidgetBuilder> routes = {
     AppRoutes.splash: (context) => SplashScreen(),
     AppRoutes.signIn: (context) => SignInScreen(),
+    AppRoutes.landingPage:(context)=>LandingScreen(),
     AppRoutes.otpVerifly: (context) => OtpVerification(),
     AppRoutes.homePage: (context) => const HomePage(),
     AppRoutes.serviceCategories: (context) {
