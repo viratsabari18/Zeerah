@@ -1,27 +1,27 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'dart:ui';
+import 'package:flutter/services.dart';
 import 'package:zeerah/core/common/app_exports.dart';
 
 class ExpolreCategoriesStack extends StatelessWidget {
-  const ExpolreCategoriesStack({super.key});
-
-  static const List<String> images = [
-    UserMessages.exploreCategory1,
-    UserMessages.exploreCategory2,
-    UserMessages.exploreCategory3,
-    UserMessages.exploreCategory4,
-  ];
+  final List<CategoryItem> items;
+  final String categoryName;
+  const ExpolreCategoriesStack({
+    super.key,
+    required this.items,
+    required this.categoryName,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-      
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.45,
-          child: EditorPickCarousel(images: images),
+          child: EditorPickCarousel(items: items, categoryName: categoryName),
         ),
         const SizedBox(height: 12),
       ],
@@ -30,8 +30,13 @@ class ExpolreCategoriesStack extends StatelessWidget {
 }
 
 class EditorPickCarousel extends StatefulWidget {
-  final List<String> images;
-  const EditorPickCarousel({super.key, required this.images});
+  final List<CategoryItem> items;
+  final String categoryName;
+  const EditorPickCarousel({
+    super.key,
+    required this.items,
+    required this.categoryName,
+  });
 
   @override
   State<EditorPickCarousel> createState() => _EditorPickCarouselState();
@@ -50,7 +55,7 @@ class _EditorPickCarouselState extends State<EditorPickCarousel> {
   @override
   void initState() {
     super.initState();
-    _baseOffset = 1000 * widget.images.length;
+    _baseOffset = (1000 * widget.items.length).toInt();
     _controller = PageController(
       viewportFraction: 1.0,
       initialPage: _baseOffset,
@@ -99,17 +104,15 @@ class _EditorPickCarouselState extends State<EditorPickCarousel> {
 
             // Visual layer
             Positioned.fill(
-              child: IgnorePointer(
-                child: AnimatedBuilder(
-                  animation: _controller,
-                  builder: (context, _) {
-                    return _buildStackedCards(
-                      page: _page,
-                      cardWidth: cardWidth,
-                      cardHeight: cardHeight,
-                    );
-                  },
-                ),
+              child: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, _) {
+                  return _buildStackedCards(
+                    page: _page,
+                    cardWidth: cardWidth,
+                    cardHeight: cardHeight,
+                  );
+                },
               ),
             ),
           ],
@@ -124,14 +127,14 @@ class _EditorPickCarouselState extends State<EditorPickCarousel> {
     required double cardHeight,
   }) {
     final entries = <_RenderEntry>[];
-    final n = widget.images.length;
+    final n = widget.items.length;
     final centerV = page.floor();
     
     for (var offset = -2; offset <= 4; offset++) {
       final vi = centerV + offset;
       final delta = vi - page;
       if (delta < -1.2 || delta > 3.2) continue;
-      final realIndex = ((vi % n) + n) % n;
+      final realIndex = (((vi % n) + n) % n).toInt();
       entries.add(_RenderEntry(index: realIndex, delta: delta));
     }
 
@@ -142,7 +145,7 @@ class _EditorPickCarouselState extends State<EditorPickCarousel> {
       children: [
         for (final e in entries)
           _buildPositionedCard(
-            imageUrl: widget.images[e.index],
+            item: widget.items[e.index],
             delta: e.delta,
             cardWidth: cardWidth,
             cardHeight: cardHeight,
@@ -152,7 +155,7 @@ class _EditorPickCarouselState extends State<EditorPickCarousel> {
   }
 
   Widget _buildPositionedCard({
-    required String imageUrl,
+    required CategoryItem item,
     required double delta,
     required double cardWidth,
     required double cardHeight,
@@ -182,7 +185,7 @@ class _EditorPickCarouselState extends State<EditorPickCarousel> {
           child: SizedBox(
             width: cardWidth,
             height: cardHeight,
-            child: _ImageView(imageUrl: imageUrl),
+            child: _ImageView(item: item, categoryName: widget.categoryName),
           ),
         ),
       ),
@@ -198,137 +201,187 @@ class _RenderEntry {
 
 // Fixed ImageView to handle both asset and network images
 class _ImageView extends StatelessWidget {
-  final String imageUrl;
-  
-  const _ImageView({
-    required this.imageUrl, 
-  });
+  final CategoryItem item;
+  final String categoryName;
+  const _ImageView({required this.item, required this.categoryName});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.55),
-            blurRadius: 28,
-            offset: const Offset(0, 14),
-          ),
-        ],
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          // Image
-          _buildImage(),
-          
-          // Gradient overlay rgba(0, 0, 0, 0.3)
-          Container(
+    return Stack(
+      children: [
+        IgnorePointer(
+          ignoring: true,
+          child: Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.transparent,
-                  Colors.black.withOpacity(0.3),
-                ],
-                stops: const [0.7, 1.0],
-              ),
-            ),
-          ),
-          
-          // BOOK NOW BUTTON (ONLY FIRST IMAGE) - with blur effect
-          Positioned(
-            bottom: 12,
-            left: 12,
-            right: 12,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: const Color.fromRGBO(255, 255, 255, 0.1),
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 0.5,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0xFF4D4D4D),
-                        ),
-                        child: const Icon(
-                          Icons.delete_outline,
-                          color: Colors.white,
-                          size: 16,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Expanded(
-                        child: Text(
-                          "Book Now",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 17,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 28,
-                        height: 28,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.black,
-                        ),
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          size: 14,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
+              borderRadius: BorderRadius.circular(18),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.15),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
                 ),
-              ),
+              ],
             ),
+            clipBehavior: Clip.antiAlias,
+            child: Positioned.fill(child: _buildImage()),
           ),
-        ],
-      ),
+        ),
+        Positioned(
+          left: 10,
+          right: 10,
+          bottom: 12,
+          child: _BookNowButton(item: item, categoryName: categoryName),
+        ),
+      ],
     );
   }
 
   Widget _buildImage() {
-    // Check if it's a network URL or asset path
+    final imageUrl = item.image;
     if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
       return Image.network(
         imageUrl,
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
-       
+        errorBuilder: (_, __, ___) => _buildErrorWidget(),
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return _buildLoadingWidget();
+        },
       );
     } else {
-      // Asset image
       return Image.asset(
         imageUrl,
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
-       
+        errorBuilder: (_, __, ___) => _buildErrorWidget(),
       );
     }
   }
 
-
-
+  Widget _buildErrorWidget() {
+    return Container(
+      color: Colors.grey.shade900,
+      child: const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.image_not_supported_outlined, size: 48, color: Colors.white24),
+            SizedBox(height: 8),
+            Text('Failed to load image', style: TextStyle(color: Colors.white38, fontSize: 12)),
+          ],
+        ),
+      ),
+    );
   }
+
+  Widget _buildLoadingWidget() {
+    return Container(
+      color: Colors.grey.shade800,
+      child: const Center(
+        child: CircularProgressIndicator(color: Colors.amber, strokeWidth: 2),
+      ),
+    );
+  }
+}
+
+class _BookNowButton extends StatefulWidget {
+  final CategoryItem item;
+  final String categoryName;
+  const _BookNowButton({required this.item, required this.categoryName});
+
+  @override
+  State<_BookNowButton> createState() => _BookNowButtonState();
+}
+
+class _BookNowButtonState extends State<_BookNowButton> {
+  double _dragOffset = 0;
+
+  void _onDragUpdate(DragUpdateDetails details, double maxWidth) {
+    setState(() {
+      _dragOffset = (_dragOffset + details.delta.dx).clamp(0, maxWidth - 60);
+    });
+  }
+
+  void _onDragEnd(DragEndDetails details, double maxWidth) {
+    // Lower threshold to 70% of max width for easier activation
+    if (_dragOffset >= (maxWidth - 60) * 0.7) {
+      // Haptic feedback first
+      HapticFeedback.mediumImpact();
+      
+      // Eager reset so it doesn't look "stuck" during transition
+      final String capturedCategory = widget.categoryName;
+      setState(() => _dragOffset = 0);
+      
+      // Navigate to the Category Details List (as shown in user's screenshot 160935)
+      Navigator.pushNamed(
+        context, 
+        AppRoutes.cleaningServices, 
+        arguments: capturedCategory,
+      );
+    } else {
+      // Snap back if threshold wasn't met
+      setState(() => _dragOffset = 0);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final totalWidth = constraints.maxWidth;
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(100),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              height: 60,
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+                gradient: LinearGradient(
+                  colors: [const Color(0xFFC0A040).withOpacity(0.3), const Color(0xFF408080).withOpacity(0.3)],
+                ),
+              ),
+              child: Stack(
+                children: [
+                  Center(
+                    child: Opacity(
+                      opacity: (1 - (_dragOffset / (totalWidth - 60))).clamp(0.2, 1.0),
+                      child: const Text('Book Now', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      width: 52,
+                      height: 52,
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white.withOpacity(0.15)),
+                      child: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 20),
+                    ),
+                  ),
+                  Positioned(
+                    left: _dragOffset,
+                    child: GestureDetector(
+                      onHorizontalDragUpdate: (d) => _onDragUpdate(d, totalWidth),
+                      onHorizontalDragEnd: (d) => _onDragEnd(d, totalWidth),
+                      child: Container(
+                        width: 52,
+                        height: 52,
+                        decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFF131B1B)),
+                        child: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 20),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}

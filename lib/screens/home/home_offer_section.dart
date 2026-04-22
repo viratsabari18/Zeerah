@@ -1,4 +1,4 @@
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zeerah/core/common/app_exports.dart';
 
 class HomeOfferSection extends StatelessWidget {
@@ -6,246 +6,222 @@ class HomeOfferSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration:  BoxDecoration(
-        color: AppColors.naturalWhite,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(Insets.md),
-          topRight: Radius.circular(Insets.md),
-        ),
-      ),
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(Insets.sm, Insets.md, Insets.sm, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              UserMessages.offerForYou,
-              style: TextStyle(
-                fontSize: AppSizes.w(context, 19),
-                fontWeight: FontWeight.w800,
-                color: AppColors.naturalBlack,
-              ),
+    return _buildOfferSection(context);
+  }
+
+  Widget _buildOfferSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(height: 32), // Added spacing to shift the section down
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            'Offer for you',
+            style: GoogleFonts.poppins(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: AppColors.naturalBlack,
             ),
-            SizedBox(height: AppSizes.h(context, 12)),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: SizedBox(
+            height: 230,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(flex: 2, child: _GardeningCard()),
-                SizedBox(width: AppSizes.w(context, 7.5)),
+                // Featured Large Card (Left)
+                Expanded(flex: 11, child: _buildFeaturedOfferCard()),
+                const SizedBox(width: 10),
+                // 2x2 Grid of Small Cards (Right)
                 Expanded(
-                  flex: 3,
+                  flex: 19,
                   child: Column(
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _TinyCard(
-                              color: AppColors.lightRed,
-                              title: UserMessages.bundleAndSave,
-                              subtitle: UserMessages.upTo25Percent,
-                              desc: UserMessages.book2PlusServices,
-                              image: UserMessages.homeGiftBox,
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: _buildSmallOfferCard(
+                                title: 'Bundle\n& Save',
+                                subtitle: 'Up to 25%',
+                                footer: 'Book 2+ Service',
+                                color: const Color(0xFFFF6B6B),
+                                icon: Icons.redeem,
+                              ),
                             ),
-                          ),
-                          SizedBox(width: AppSizes.w(context, 3.75)),
-                          Expanded(
-                            child: _TinyCard(
-                              color: AppColors.softBlue,
-                              title: UserMessages.referAndEarn,
-                              subtitle: UserMessages.points50,
-                              desc: UserMessages.inviteFriend,
-                              image: UserMessages.homeParse,
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: _buildSmallOfferCard(
+                                title: 'Refer\n& Earn',
+                                subtitle: '50 Points',
+                                footer: 'Invite a friend',
+                                color: const Color(0xFF5D8BF4),
+                                icon: Icons.account_balance_wallet,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                      SizedBox(height: AppSizes.h(context, 8)),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _TinyCard(
-                              color: AppColors.neonGreen,
-                              title: UserMessages.weekendSpecial,
-                              subtitle: UserMessages.upTo15Percent,
-                              desc: UserMessages.satSunOnly,
-                              image: UserMessages.homeCalendar,
+                      const SizedBox(height: 10),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: _buildSmallOfferCard(
+                                title: 'Weekend\nSpecial',
+                                subtitle: 'Up to 15%',
+                                footer: 'Sat & Sun Only',
+                                color: const Color(0xFF58E067),
+                                icon: Icons.calendar_today,
+                              ),
                             ),
-                          ),
-                          SizedBox(width: AppSizes.w(context, 3.75)),
-                          Expanded(
-                            child: _TinyCard(
-                              color: AppColors.pinkPurple,
-                              title: UserMessages.firstBooking,
-                              subtitle: UserMessages.percent20OFF,
-                              desc: UserMessages.forNewUsers,
-                              image: UserMessages.homeGiftBox,
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: _buildSmallOfferCard(
+                                title: 'First Booking\nOffer',
+                                subtitle: '20% OFF',
+                                footer: 'For new user\'s only',
+                                color: const Color(0xFFD600D6),
+                                icon: Icons.redeem,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
-}
 
-class _GardeningCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildFeaturedOfferCard() {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.offerYellow,
-        borderRadius: BorderRadius.circular(Insets.sm),
+        color: const Color(0xFFFFE84F),
+        borderRadius: BorderRadius.circular(26),
         boxShadow: [
           BoxShadow(
-            color: AppColors.naturalBlack.withOpacity(0.25),
-            offset: const Offset(-4, 6),
-            blurRadius: AppSizes.w(context, 10),
-            spreadRadius: AppSizes.w(context, 1),
+            color: Colors.black.withOpacity(0.12),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
-      padding: EdgeInsets.all(AppSizes.w(context, 11)),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            UserMessages.percent20OFF,
-            style: TextStyle(
-              color: AppColors.primaryRed,
-              fontSize: AppSizes.w(context, 17),
-              fontWeight: FontWeight.w900,
-            ),
+            '20%\nOFF',
             textAlign: TextAlign.center,
-          ),
-          SizedBox(height: AppSizes.h(context, 6.5)),
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppSizes.w(context, 7.5),
-              vertical: AppSizes.h(context, 2.5),
+            style: GoogleFonts.poppins(
+              fontSize: 24,
+              fontWeight: FontWeight.w800,
+              color: AppColors.primaryRed,
+              height: 1,
             ),
+          ),
+          const SizedBox(height: 6),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
             decoration: BoxDecoration(
               color: AppColors.primaryRed,
-              borderRadius: BorderRadius.circular(Insets.xs),
+              borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              UserMessages.limited,
-              style: TextStyle(
-                color: AppColors.naturalWhite,
-                fontSize: AppSizes.w(context, 9),
-                fontWeight: FontWeight.w600,
+              'Limited Offer',
+              style: GoogleFonts.poppins(
+                fontSize: 10,
+                color: Colors.white,
               ),
             ),
           ),
-          Image.asset(
-            UserMessages.homeGardening,
-            height: AppSizes.h(context, 65),
-            width: AppSizes.w(context, 56),
-            fit: BoxFit.contain,
+          const SizedBox(height: 8),
+          Flexible(
+            child: Image.asset('lib/assets/images/man.png', fit: BoxFit.contain),
           ),
+          const SizedBox(height: 6),
           Text(
-            UserMessages.gardeningServices,
-            style: TextStyle(
-              fontSize: AppSizes.w(context, 11),
-              fontWeight: FontWeight.w600,
-              color: AppColors.naturalBlack.withOpacity(0.87),
-            ),
+            'Gardening Services',
             textAlign: TextAlign.center,
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ],
       ),
     );
   }
-}
 
-class _TinyCard extends StatelessWidget {
-  final Color color;
-  final String title;
-  final String subtitle;
-  final String desc;
-  final String image;
-
-  const _TinyCard({
-    required this.color,
-    required this.title,
-    required this.subtitle,
-    required this.desc,
-    required this.image,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildSmallOfferCard({
+    required String title,
+    required String subtitle,
+    required String footer,
+    required Color color,
+    required IconData icon,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(Insets.sm),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppColors.naturalBlack.withOpacity(0.25),
-            offset: const Offset(-4, 6),
-            blurRadius: AppSizes.w(context, 10),
-            spreadRadius: AppSizes.w(context, 1),
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
-      padding: EdgeInsets.all(AppSizes.w(context, 7.5)),
-      child: Row(
+      padding: const EdgeInsets.all(10),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            image,
-            height: AppSizes.h(context, 24),
-            width: AppSizes.w(context, 19),
-            fit: BoxFit.contain,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(icon, color: Colors.white.withOpacity(0.9), size: 16),
+              Text(
+                subtitle,
+                style: GoogleFonts.poppins(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                ),
+              ),
+            ],
           ),
-          SizedBox(width: AppSizes.w(context, 3.75)),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: AppColors.naturalWhite,
-                    fontSize: AppSizes.w(context, 10.5),
-                    fontWeight: FontWeight.w600,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(height: AppSizes.h(context, 3)),
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    color: AppColors.naturalWhite,
-                    fontSize: AppSizes.w(context, 9),
-                    fontWeight: FontWeight.w800,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(height: AppSizes.h(context, 2.5)),
-                Text(
-                  desc,
-                  style: TextStyle(
-                    color: AppColors.naturalWhite.withOpacity(0.7),
-                    fontSize: AppSizes.w(context, 7.5),
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+          const SizedBox(height: 4),
+          Text(
+            title,
+            style: GoogleFonts.poppins(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+              height: 1.1,
             ),
+          ),
+          const Spacer(),
+          Text(
+            footer,
+            style: GoogleFonts.poppins(
+              fontSize: 8,
+              color: Colors.white.withOpacity(0.8),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

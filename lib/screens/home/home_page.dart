@@ -16,8 +16,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _selectedCategoryIndex = 0;
+
   @override
   Widget build(BuildContext context) {
+    final selectedCategoryName = CategoryData.categories[_selectedCategoryIndex]["title"]!;
+    final stackItems = CategoryData.getItemsForCategory(selectedCategoryName);
+
     return Scaffold(
       backgroundColor: AppColors.naturalWhite,
       body: SafeArea(
@@ -36,8 +41,22 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SliverToBoxAdapter(child: SearchBox()),
-            const SliverToBoxAdapter(child: ExpoloreCategories()),
-            SliverToBoxAdapter(child: ExpolreCategoriesStack()),
+            SliverToBoxAdapter(
+              child: ExpoloreCategories(
+                selectedIndex: _selectedCategoryIndex,
+                onCategorySelected: (index) {
+                  setState(() {
+                    _selectedCategoryIndex = index;
+                  });
+                },
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: ExpolreCategoriesStack(
+                items: stackItems,
+                categoryName: selectedCategoryName,
+              ),
+            ),
 
             SliverToBoxAdapter(child: ReliableAndTrustworthySection()),
             SliverToBoxAdapter(child: ReferSection()),

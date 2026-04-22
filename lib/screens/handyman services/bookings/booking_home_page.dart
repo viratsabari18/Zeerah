@@ -4,9 +4,9 @@ import 'package:zeerah/screens/handyman%20services/bookings/service_type.dart';
 import 'package:zeerah/screens/handyman%20services/bookings/price_details.dart';
 
 class BookingHomePage extends StatefulWidget {
-  final String bookingCategory;
+  final CategoryItem service;
 
-  const BookingHomePage({this.bookingCategory = "Laudary", super.key});
+  const BookingHomePage({required this.service, super.key});
 
   @override
   State<BookingHomePage> createState() => _BookingHomePageState();
@@ -36,7 +36,7 @@ class _BookingHomePageState extends State<BookingHomePage> {
         title: Padding(
           padding: EdgeInsets.only(top: AppSizes.h(context, 10)),
           child: Text(
-            "${widget.bookingCategory} Booking",
+            "${widget.service.title} Booking",
             style: TextStyle(
               color: AppColors.naturalWhite,
               fontSize: AppSizes.w(context, 20),
@@ -67,7 +67,11 @@ class _BookingHomePageState extends State<BookingHomePage> {
                 height: AppSizes.h(context, 52),
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.serviceInProgress);
+                    Navigator.pushNamed(
+                      context, 
+                      AppRoutes.bookingConfirmed,
+                      arguments: widget.service,
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryRed,

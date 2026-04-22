@@ -13,12 +13,13 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   carousel_slider: ^5.1.2
+  flutter_card_swiper: ^7.2.0
+  google_maps_flutter: ^2.10.0
+  geolocator: ^13.0.1
+  provider: ^6.1.5+1
   intl: ^0.20.1
-  geolocator: ^14.0.1
   geocoding: ^4.0.0
-  google_maps_flutter: ^2.5.0
-
- 
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +78,13 @@ flutter:
     - lib/assets/images/cockroach_control.png
     - lib/assets/images/beg_bugs_control.png
     - lib/assets/images/termite_control.png
+    - lib/assets/images/rider_car.png
+    - lib/assets/images/car.png
+    - lib/assets/images/handsman.png
+    - lib/assets/images/worker_1.png
+    - lib/assets/images/worker_2.png
+    - lib/assets/images/rider_image.png
+    - lib/assets/images/man.png
 
     #Service booking
 

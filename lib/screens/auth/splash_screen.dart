@@ -15,7 +15,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     Timer(const Duration(seconds: 3), () {
       if (mounted) {
-        Navigator.pushReplacementNamed(context, AppRoutes.signIn);
+        Navigator.pushReplacementNamed(
+          context,
+          AppRoutes.signIn,
+        );
       }
     });
   }
