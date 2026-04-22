@@ -88,27 +88,12 @@ class _PaymentsHomePageState extends State<PaymentsHomePage> {
     );
   }
 
-  Widget bottomBtn(String text, IconData icon) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
-      decoration: BoxDecoration(
-        color: AppColors.primaryRed,
-        borderRadius: BorderRadius.circular(Insets.md),
-      ),
-      child: Row(
-        children: [
-          Text(text, style: const TextStyle(color: AppColors.naturalWhite)),
-          SizedBox(width: Insets.xxs),
-          Icon(icon, color: AppColors.naturalWhite, size: AppSizes.w(context, 18)),
-        ],
-      ),
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.paymentBgColor,
+      backgroundColor: AppColors.reviewBgColor,
       appBar: AppBar(
         backgroundColor: AppColors.primaryRed,
         elevation: 0,
@@ -265,28 +250,7 @@ class _PaymentsHomePageState extends State<PaymentsHomePage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: AppSizes.h(context, 20)), 
-                     // Bottom buttons
-            Container(
-              padding: EdgeInsets.all(Insets.md),
-              decoration: BoxDecoration(
-                color: AppColors.paymentBgColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, -2),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  bottomBtn(UserMessages.bookings, Icons.shopping_bag),
-                  bottomBtn(UserMessages.home, Icons.home),
-                ],
-              ),
-            ),
+                 
                   ],
                 ),
               ),

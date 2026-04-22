@@ -20,6 +20,8 @@ dependencies:
   intl: ^0.20.1
   geocoding: ^4.0.0
   google_fonts: ^6.2.1
+  image_picker: ^1.0.7
+  file_picker: ^11.0.1
 
 dev_dependencies:
   flutter_test:
@@ -105,6 +107,15 @@ flutter:
     - lib/assets/images/payments_upi.png
     - lib/assets/images/payments_wallet.png
     - lib/assets/images/bookings.png
+
+    # notifications
+    - lib/assets/images/notifaiction_acceptance.png
+    - lib/assets/images/notification_driving.png
+    - lib/assets/images/notification_payment.png
+
+    # kyc verification
+    - lib/assets/images/kyc_front_of_id.png
+    - lib/assets/images/kyc_back_of_id.png
 
   fonts:
   - family: Inter

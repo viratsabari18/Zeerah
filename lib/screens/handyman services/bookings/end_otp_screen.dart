@@ -247,29 +247,7 @@ class EndOtpView extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: AppSizes.h(context, 30)),
-          GestureDetector(
-            // onTap: () {
-            //   Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-            // },
-            child: Container(
-              height: AppSizes.h(context, 50),
-              width: AppSizes.w(context, 110),
-              decoration: BoxDecoration(
-                color: AppColors.primaryRed,
-                borderRadius: BorderRadius.circular(Insets.md),
-              ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(UserMessages.home, style: TextStyle(color: AppColors.naturalWhite)),
-                  SizedBox(width: 6),
-                  Icon(Icons.home, color: AppColors.naturalWhite),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(height: AppSizes.h(context, 30)),
+  
         ],
       ),
     );

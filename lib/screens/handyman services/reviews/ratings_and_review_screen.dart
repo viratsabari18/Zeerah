@@ -53,32 +53,7 @@ class _RatingsAndReviewScreenState extends State<RatingsAndReviewScreen> {
     );
   }
 
-  Widget bottomBtn(String text, IconData icon) {
-    return GestureDetector(
-      onTap: () {
-        if (text == UserMessages.bookings) {
-          print(UserMessages.navigateToBookings);
-        } else if (text == UserMessages.home) {
-          print(UserMessages.navigateToHome);
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
-        decoration: BoxDecoration(
-          color: AppColors.primaryRed,
-          borderRadius: BorderRadius.circular(Insets.md),
-        ),
-        child: Row(
-          children: [
-            Text(text, style: const TextStyle(color: AppColors.naturalWhite)),
-            SizedBox(width: Insets.xxs),
-            Icon(icon, color: AppColors.naturalWhite, size: AppSizes.w(context, 18)),
-          ],
-        ),
-      ),
-    );
-  }
-
+ 
   String getRatingText(int rating) {
     switch (rating) {
       case 1:
@@ -346,28 +321,7 @@ class _RatingsAndReviewScreenState extends State<RatingsAndReviewScreen> {
                       ),
                     ),
         
-                    SizedBox(height: AppSizes.h(context, 20)),
-                      
-            Container(
-              padding: EdgeInsets.all(Insets.md),
-              decoration: BoxDecoration(
-                color: AppColors.reviewBgColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, -2),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  bottomBtn(UserMessages.bookings, Icons.shopping_bag),
-                  bottomBtn(UserMessages.home, Icons.home),
-                ],
-              ),
-            ), 
+              
                   ],
                 ),
               ),

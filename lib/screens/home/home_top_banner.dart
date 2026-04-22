@@ -1,4 +1,3 @@
-
 import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:zeerah/core/common/app_exports.dart';
@@ -64,7 +63,9 @@ class _HomeTopBannerState extends State<HomeTopBanner> {
                   width: currentIndex == index ? Insets.xsm : Insets.xxs,
                   height: Insets.xxs,
                   decoration: BoxDecoration(
-                    color: currentIndex == index ? AppColors.softBlue : AppColors.naturalBlack.withOpacity(0.54),
+                    color: currentIndex == index
+                        ? AppColors.softBlue
+                        : AppColors.naturalBlack.withOpacity(0.54),
                     borderRadius: BorderRadius.circular(Insets.xs),
                   ),
                 );
@@ -80,7 +81,10 @@ class _HomeTopBannerState extends State<HomeTopBanner> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Insets.xs),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
+        padding: EdgeInsets.symmetric(
+          horizontal: Insets.sm,
+          vertical: Insets.xs,
+        ),
         decoration: BoxDecoration(
           color: AppColors.naturalWhite.withOpacity(0.4),
           borderRadius: BorderRadius.circular(Insets.sm),
@@ -145,7 +149,10 @@ class _HomeTopBannerState extends State<HomeTopBanner> {
             Row(
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: Insets.xs, vertical: Insets.xxs),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Insets.xs,
+                    vertical: Insets.xxs,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.softPeach,
                     borderRadius: BorderRadius.circular(Insets.md),
@@ -181,32 +188,37 @@ class _HomeTopBannerState extends State<HomeTopBanner> {
                   ),
                 ),
                 SizedBox(width: Insets.xxxs),
-                Stack(
-                  children: [
-                    Image.asset(
-                      UserMessages.homeNotifications,
-                      height: AppSizes.h(context, 32),
-                      color: AppColors.naturalBlack,
-                    ),
-                    Positioned(
-                      right: 0,
-                      top: -5,
-                      child: Container(
-                        padding: EdgeInsets.all(Insets.xxs),
-                        decoration: BoxDecoration(
-                          color: AppColors.brightYellow,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          "3",
-                          style: TextStyle(
-                            color: AppColors.naturalBlack,
-                            fontSize: AppSizes.w(context, 11),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.notificationHistory);
+                  },
+                  child: Stack(
+                    children: [
+                      Image.asset(
+                        UserMessages.homeNotifications,
+                        height: AppSizes.h(context, 32),
+                        color: AppColors.naturalBlack,
+                      ),
+                      Positioned(
+                        right: 0,
+                        top: -5,
+                        child: Container(
+                          padding: EdgeInsets.all(Insets.xxs),
+                          decoration: BoxDecoration(
+                            color: AppColors.brightYellow,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            "3",
+                            style: TextStyle(
+                              color: AppColors.naturalBlack,
+                              fontSize: AppSizes.w(context, 11),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
