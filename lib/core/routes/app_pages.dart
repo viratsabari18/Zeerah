@@ -14,10 +14,16 @@ import 'package:zeerah/screens/booking_flow/professional_assigned_screen.dart';
 import 'package:zeerah/screens/booking_flow/service_verification_screen.dart';
 import 'package:zeerah/screens/handyman%20services/bookings/booking_home_page.dart';
 import 'package:zeerah/screens/handyman%20services/bookings/bookig_sevice_progress_home.dart';
+import 'package:zeerah/screens/profile/profile_screen.dart';
+import 'package:zeerah/screens/profile/wallet_history_screen.dart';
+import 'package:zeerah/screens/profile/help_desk_screen.dart';
+import 'package:zeerah/screens/profile/referral_screen.dart';
+import 'package:zeerah/screens/message/message_screen.dart';
 import 'package:zeerah/core/common/app_exports.dart';
 import 'package:zeerah/screens/notifications/notification_history.dart';
 import 'package:zeerah/screens/profile%20kyc/kyc_verifaication.dart';
 import 'package:zeerah/screens/profile/favorie_service_history.dart';
+import 'package:zeerah/core/models/user_model.dart';
 
 class AppPages {
   static Map<String, WidgetBuilder> routes = {
@@ -95,6 +101,20 @@ class AppPages {
     AppRoutes.bookingHistory:(context)=>BookingHistory(),
     AppRoutes.favoitesHistory:(context)=>FavorieServiceHistory(),
 
-    AppRoutes.chatHomeScreen:(context)=>ChatRoomScreen()
+    AppRoutes.chatHomeScreen:(context)=>ChatRoomScreen(),
+    AppRoutes.profile: (context) {
+      final user = ModalRoute.of(context)!.settings.arguments as UserModel? ?? UserModel.mock();
+      return ProfileScreen(user: user);
+    },
+    AppRoutes.walletHistory: (context) {
+      final user = ModalRoute.of(context)!.settings.arguments as UserModel? ?? UserModel.mock();
+      return WalletHistoryScreen(user: user);
+    },
+    AppRoutes.helpDesk: (context) => const HelpDeskScreen(),
+    AppRoutes.messages: (context) => const MessageScreen(),
+    AppRoutes.referral: (context) {
+      final user = ModalRoute.of(context)!.settings.arguments as UserModel? ?? UserModel.mock();
+      return ReferralScreen(user: user);
+    },
   };
 }

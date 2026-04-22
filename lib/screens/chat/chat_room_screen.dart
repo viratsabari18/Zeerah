@@ -90,7 +90,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               backgroundColor: Colors.grey.shade200,
               child: ClipOval(
                 child: Image.network(
-                  otherUser.image,
+                 "",
                   width: AppSizes.w(context, 48),
                   height: AppSizes.h(context, 48),
                   fit: BoxFit.cover,
@@ -114,13 +114,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     otherUser.name,
                     style: const TextStyle(color: AppColors.naturalWhite),
                   ),
-                  Text(
-                    otherUser.lastSeen,
-                    style: const TextStyle(
-                      color: AppColors.naturalWhite70,
-                      fontSize: 12,
-                    ),
-                  ),
+                 
                 ],
               ),
             ),

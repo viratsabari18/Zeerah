@@ -13,11 +13,16 @@ class AppRoutes {
   static const String serviceVerification = '/serviceVerification';
   static const String bookingHomePage = '/bookingHomePage';
   static const String serviceInProgress = '/serviceInProgress';
+  static const String profile = '/profile';
+  static const String walletHistory = '/walletHistory';
+  static const String helpDesk = '/helpDesk';
+  static const String messages = '/messages';
+  static const String referral = '/referral';
 
   static const String notificationHistory = "/notificationHistory";
   static const String kycVerfication = "/kycVerication";
   static const String bookingHistory = "/bookingHistory";
-  static const String favoitesHistory = "favoitesHistory";
+  static const String favoitesHistory = "/favoitesHistory";
 
-  static const String chatHomeScreen = "chatHomeScreen";
+  static const String chatHomeScreen = "/chatHomeScreen";
 }
