@@ -1,11 +1,4 @@
-enum BookingState {
-  searching,
-  assigned,
-  onTheWay,
-  arrived,
-  started,
-  completed,
-}
+enum BookingState { searching, assigned, onTheWay, arrived, started, completed }
 
 class ProfessionalMatch {
   final String name;
@@ -19,6 +12,24 @@ class ProfessionalMatch {
     required this.jobsDone,
     required this.avatarUrl,
   });
+
+  factory ProfessionalMatch.fromJson(Map<String, dynamic> json) {
+    return ProfessionalMatch(
+      name: json['name'] ?? '',
+      rating: (json['rating'] ?? 0).toDouble(),
+      jobsDone: json['jobsDone'] ?? 0,
+      avatarUrl: json['avatarUrl'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "name": name,
+      "rating": rating,
+      "jobsDone": jobsDone,
+      "avatarUrl": avatarUrl,
+    };
+  }
 
   factory ProfessionalMatch.dummy() {
     return const ProfessionalMatch(

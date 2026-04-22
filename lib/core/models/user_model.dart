@@ -19,6 +19,41 @@ class UserModel {
     required this.loyaltyActivity,
   });
 
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id']?.toString() ?? '',
+      name: json['name'] ?? '',
+      email: json['email'] ?? '',
+      profileImage: json['profileImage'] ?? '',
+
+     
+      walletBalance: (json['walletBalance'] ?? 0).toDouble(),
+      cashbackBalance: (json['cashbackBalance'] ?? 0).toDouble(),
+
+      referralCode: json['referralCode'] ?? '',
+
+
+      loyaltyActivity: (json['loyaltyActivity'] as List<dynamic>? ?? [])
+          .map((e) => Map<String, dynamic>.from(e))
+          .toList(),
+    );
+  }
+
+ 
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "name": name,
+      "email": email,
+      "profileImage": profileImage,
+      "walletBalance": walletBalance,
+      "cashbackBalance": cashbackBalance,
+      "referralCode": referralCode,
+      "loyaltyActivity": loyaltyActivity,
+    };
+  }
+
+
   factory UserModel.mock() {
     return UserModel(
       id: '1',

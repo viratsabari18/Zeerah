@@ -32,7 +32,6 @@ static const Color starColor = Colors.amber;
 static const Color reviewGreen = Color(0xFF64906F);
 static const Color submitButtonColor = Color(0xFFFFB300);
 
-static const Color paymentBgColor = Color(0xFFF4F4F4);
 static const Color selectedPaymentBg = Color.fromRGBO(253, 202, 202, 1);
 static const Color billGreen = Color(0xFF64906F);
 static const Color payButtonColor = Color(0xFFFFB300);
@@ -51,4 +50,31 @@ static const Color progressGreen = Color(0xFF54FC81);
 static const Color progressYellow = Color(0xFFFFBC0D);
 static const Color progressBgColor = Color(0xFFFEDD85);
 static const Color naturalBlack45 = Color(0x73000000);
+
+static const Color chatBgColor = Color(0xFF0B1B13);
+static const Color naturalWhite70 = Color(0xB3FFFFFF);
+static const Color chatBubbleMe = Color(0xFFFFC107);
+static const Color sendButtonColor = Colors.green;
+static const Color priceYellow = Color.fromRGBO(255, 197, 43, 1);
+static const Color starOrange = Colors.orange;
+
+static const Color outerInProgress = Color.fromRGBO(253, 250, 248, 1);
+static const Color outerAccepted = Color.fromRGBO(244, 251, 251, 1);
+static const Color outerCompleted = Color.fromRGBO(172, 235, 239, 0.15);
+static const Color outerRejected = Color.fromRGBO(253, 243, 243, 1);
+static const Color innerInProgress = Color.fromRGBO(255, 235, 216, 1);
+static const Color innerAccepted = Color.fromRGBO(172, 235, 239, 1);
+static const Color innerCompleted = Color.fromRGBO(209, 255, 222, 1);
+static const Color innerRejected = Color.fromRGBO(253, 205, 206, 1);
+static const Color borderInProgress = Colors.orange;
+
+static const Color borderRejected = Colors.red;
+static const Color blinkingRed = Color.fromRGBO(199, 52, 52, 1);
+static const Color blinkingGreen = Color.fromRGBO(52, 199, 89, 1);
+static const Color priceOrange = Color.fromRGBO(231, 111, 0, 1);
+static const Color approvedGreen = Color.fromRGBO(52, 199, 89, 1);
+static const Color notificationBgColor = Color(0xFFF4F4F4);
+static const Color notificationCardBg = Color(0xFFF7F7F7);
+static const Color rateNowColor = Color.fromRGBO(252, 128, 25, 1);
+
 }
