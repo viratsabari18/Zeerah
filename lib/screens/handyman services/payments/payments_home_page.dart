@@ -1,4 +1,3 @@
-
 import 'package:zeerah/core/common/app_exports.dart';
 
 class PaymentsHomePage extends StatefulWidget {
@@ -127,161 +126,175 @@ class _PaymentsHomePageState extends State<PaymentsHomePage> {
           ),
         ),
       ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(Insets.sm),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              UserMessages.serviceDetails,
-                              style: TextStyle(
-                                color: AppColors.primaryRed,
-                                fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Main scrollable content
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(Insets.sm),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                UserMessages.serviceDetails,
+                                style: TextStyle(
+                                  color: AppColors.primaryRed,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: AppSizes.h(context, 6)),
-                            Text(
-                              UserMessages.fullHomeCleaning,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: AppSizes.h(context, 4)),
-                            Text(
-                              UserMessages.serviceDateTime,
-                              style: TextStyle(
-                                fontSize: AppSizes.w(context, 11),
-                                color: AppColors.naturalBlack.withOpacity(0.54),
+                              SizedBox(height: AppSizes.h(context, 6)),
+                              Text(
+                                UserMessages.fullHomeCleaning,
+                                style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
-                            ),
-                          ],
+                              SizedBox(height: AppSizes.h(context, 4)),
+                              Text(
+                                UserMessages.serviceDateTime,
+                                style: TextStyle(
+                                  fontSize: AppSizes.w(context, 11),
+                                  color: AppColors.naturalBlack.withOpacity(0.54),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(Insets.xs),
-                        child: Image.asset(
-                          UserMessages.fullHouseCleaningImage,
-                          height: AppSizes.h(context, 80),
-                          width: AppSizes.w(context, 110),
-                          fit: BoxFit.cover,
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(Insets.xs),
+                          child: Image.asset(
+                            UserMessages.fullHouseCleaningImage,
+                            height: AppSizes.h(context, 80),
+                            width: AppSizes.w(context, 110),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: AppSizes.h(context, 20)),
-                  Text(
-                    UserMessages.billBreakdown,
-                    style: TextStyle(
-                      color: AppColors.billGreen,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: AppSizes.h(context, 10)),
-                  billRow(UserMessages.serviceFee, "₹ 2,599", AppColors.naturalBlack),
-                  billRow(UserMessages.extraTime, "+ ₹399", AppColors.neonGreen),
-                  billRow(UserMessages.coupon, "- ₹599", AppColors.softBlue),
-                  SizedBox(height: AppSizes.h(context, 12)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        UserMessages.totalAmount,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "₹2,599",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: AppSizes.w(context, 18),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: AppSizes.h(context, 10)),
-                  Container(
-                    height: AppSizes.h(context, 2),
-                    decoration: BoxDecoration(
-                      color: AppColors.billGreen.withOpacity(0.3),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.billGreen.withOpacity(0.5),
-                          blurRadius: AppSizes.w(context, 6),
-                        )
                       ],
                     ),
-                  ),
-                  SizedBox(height: AppSizes.h(context, 20)),
-                  Text(
-                    UserMessages.paymentMethod,
-                    style: TextStyle(
-                      color: AppColors.billGreen,
-                      fontWeight: FontWeight.bold,
+                    SizedBox(height: AppSizes.h(context, 20)),
+                    Text(
+                      UserMessages.billBreakdown,
+                      style: TextStyle(
+                        color: AppColors.billGreen,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: AppSizes.h(context, 12)),
-                  paymentTile(
-                    title: UserMessages.upi,
-                    icon: UserMessages.paymentsUpi,
-                    value: UserMessages.upi,
-                  ),
-                  paymentTile(
-                    title: UserMessages.creditDebitCard,
-                    icon: UserMessages.paymentsCreditCard,
-                    value: UserMessages.card,
-                  ),
-                  paymentTile(
-                    title: UserMessages.wallet,
-                    icon: UserMessages.paymentsWallet,
-                    value: UserMessages.walletValue,
-                  ),
-                  paymentTile(
-                    title: UserMessages.cashOnDelivery,
-                    icon: UserMessages.paymentsCashOnDelivery,
-                    value: UserMessages.cod,
-                  ),
-                  SizedBox(height: AppSizes.h(context, 20)),
-                  Container(
-                    height: AppSizes.h(context, 55),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: AppColors.payButtonColor,
-                      borderRadius: BorderRadius.circular(Insets.sm),
+                    SizedBox(height: AppSizes.h(context, 10)),
+                    billRow(UserMessages.serviceFee, "₹ 2,599", AppColors.naturalBlack),
+                    billRow(UserMessages.extraTime, "+ ₹399", AppColors.neonGreen),
+                    billRow(UserMessages.coupon, "- ₹599", AppColors.softBlue),
+                    SizedBox(height: AppSizes.h(context, 12)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          UserMessages.totalAmount,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "₹2,599",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppSizes.w(context, 18),
+                          ),
+                        ),
+                      ],
                     ),
-                    child: Center(
-                      child: Text(
-                        UserMessages.payNow,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: AppSizes.w(context, 16),
+                    SizedBox(height: AppSizes.h(context, 10)),
+                    Container(
+                      height: AppSizes.h(context, 2),
+                      decoration: BoxDecoration(
+                        color: AppColors.billGreen.withOpacity(0.3),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.billGreen.withOpacity(0.5),
+                            blurRadius: AppSizes.w(context, 6),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: AppSizes.h(context, 20)),
+                    Text(
+                      UserMessages.paymentMethod,
+                      style: TextStyle(
+                        color: AppColors.billGreen,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: AppSizes.h(context, 12)),
+                    paymentTile(
+                      title: UserMessages.upi,
+                      icon: UserMessages.paymentsUpi,
+                      value: UserMessages.upi,
+                    ),
+                    paymentTile(
+                      title: UserMessages.creditDebitCard,
+                      icon: UserMessages.paymentsCreditCard,
+                      value: UserMessages.card,
+                    ),
+                    paymentTile(
+                      title: UserMessages.wallet,
+                      icon: UserMessages.paymentsWallet,
+                      value: UserMessages.walletValue,
+                    ),
+                    paymentTile(
+                      title: UserMessages.cashOnDelivery,
+                      icon: UserMessages.paymentsCashOnDelivery,
+                      value: UserMessages.cod,
+                    ),
+                    SizedBox(height: AppSizes.h(context, 20)),
+                    Container(
+                      height: AppSizes.h(context, 55),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: AppColors.payButtonColor,
+                        borderRadius: BorderRadius.circular(Insets.sm),
+                      ),
+                      child: Center(
+                        child: Text(
+                          UserMessages.payNow,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppSizes.w(context, 16),
+                          ),
                         ),
                       ),
                     ),
+                    SizedBox(height: AppSizes.h(context, 20)), 
+                     // Bottom buttons
+            Container(
+              padding: EdgeInsets.all(Insets.md),
+              decoration: BoxDecoration(
+                color: AppColors.paymentBgColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, -2),
                   ),
-                  SizedBox(height: AppSizes.h(context, 100)),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  bottomBtn(UserMessages.bookings, Icons.shopping_bag),
+                  bottomBtn(UserMessages.home, Icons.home),
                 ],
               ),
             ),
-          ),
-          Positioned(
-            bottom: Insets.md,
-            left: Insets.md,
-            right: Insets.md,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                bottomBtn(UserMessages.bookings, Icons.shopping_bag),
-                bottomBtn(UserMessages.home, Icons.home),
-              ],
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+            
+           
+          ],
+        ),
       ),
     );
   }

@@ -15,6 +15,7 @@ import 'package:zeerah/screens/booking_flow/service_verification_screen.dart';
 import 'package:zeerah/screens/handyman%20services/bookings/booking_home_page.dart';
 import 'package:zeerah/screens/handyman%20services/bookings/bookig_sevice_progress_home.dart';
 import 'package:zeerah/core/common/app_exports.dart';
+
 import 'package:zeerah/core/constants/category_data.dart';
 
 class AppPages {
@@ -77,6 +78,6 @@ class AppPages {
       final service = ModalRoute.of(context)!.settings.arguments as CategoryItem;
       return BookingHomePage(service: service);
     },
-    AppRoutes.serviceInProgress: (context) => const BookingServiceProgressHome(isCompleted: false),
+    AppRoutes.serviceInProgress: (context) => const BookingServiceProgressHome(serviceDurationInSeconds: 10,),
   };
 }

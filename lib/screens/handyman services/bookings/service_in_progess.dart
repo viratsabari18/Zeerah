@@ -5,9 +5,12 @@ import 'package:zeerah/screens/handyman%20services/bookings/service_details_card
 import 'package:zeerah/screens/handyman%20services/bookings/service_progress_widget.dart';
 
 class ServiceInProgress extends StatefulWidget {
-  final bool isCompleted;
-
-  const ServiceInProgress({required this.isCompleted, super.key});
+  final int serviceDuration; // Receive duration from first widget
+  
+  const ServiceInProgress({
+    super.key,
+    required this.serviceDuration,
+  });
 
   @override
   State<ServiceInProgress> createState() => _ServiceInProgressState();
@@ -15,21 +18,44 @@ class ServiceInProgress extends StatefulWidget {
 
 class _ServiceInProgressState extends State<ServiceInProgress> {
   late Timer _timer;
-  int totalSeconds = 600;
+  late int totalSeconds;
+  bool isCompleted = false;
 
   @override
   void initState() {
     super.initState();
+    totalSeconds = widget.serviceDuration; // Use the duration passed from first widget
+    _startTimer();
+  }
+
+  void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
-        if (totalSeconds == 0) {
-          totalSeconds = 600;
-        } else {
+        if (totalSeconds > 0) {
           totalSeconds--;
+          // Check if timer has completed
+          if (totalSeconds == 0) {
+            _handleServiceCompletion();
+          }
         }
       });
     });
   }
+
+  void _handleServiceCompletion() {
+    // Stop the timer first
+    _timer.cancel();
+    
+   
+    setState(() {
+      isCompleted = true;
+    });
+    
+    print("Service completed automatically after ${widget.serviceDuration} seconds");
+    
+
+  }
+
 
   String formatTime(int seconds) {
     int h = seconds ~/ 3600;
@@ -58,14 +84,14 @@ class _ServiceInProgressState extends State<ServiceInProgress> {
                 alignment: Alignment.center,
                 children: [
                   Image.asset(
-                    !widget.isCompleted
+                    !isCompleted
                         ? UserMessages.serviceInProgressImage
                         : UserMessages.serviceCompletedImage,
                     height: AppSizes.h(context, 200),
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
-                  if (!widget.isCompleted) ...[
+                  if (!isCompleted) ...[
                     Padding(
                       padding: EdgeInsets.only(left: AppSizes.w(context, 90)),
                       child: Column(
@@ -235,11 +261,11 @@ class _ServiceInProgressState extends State<ServiceInProgress> {
                                   ),
                                   SizedBox(height: AppSizes.h(context, 6)),
                                   Text(
-                                    widget.isCompleted
+                                    isCompleted
                                         ? UserMessages.serviceCompletedText
                                         : UserMessages.serviceInProgressText,
                                     style: TextStyle(
-                                      color: widget.isCompleted
+                                      color: isCompleted
                                           ? AppColors.completedBlue
                                           : AppColors.primaryRed,
                                       fontWeight: FontWeight.bold,
@@ -254,13 +280,13 @@ class _ServiceInProgressState extends State<ServiceInProgress> {
                                 vertical: Insets.xxs,
                               ),
                               decoration: BoxDecoration(
-                                color: widget.isCompleted
+                                color: isCompleted
                                     ? AppColors.completedBlue
                                     : AppColors.progressGreen,
                                 borderRadius: BorderRadius.circular(Insets.xs),
                               ),
                               child: Text(
-                                widget.isCompleted ? UserMessages.completed : UserMessages.inProgress,
+                                isCompleted ? UserMessages.completed : UserMessages.inProgress,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.naturalWhite,
@@ -283,7 +309,7 @@ class _ServiceInProgressState extends State<ServiceInProgress> {
                                 horizontal: Insets.md,
                               ),
                               decoration: BoxDecoration(
-                                color: widget.isCompleted ? AppColors.darkRed : AppColors.primaryYellow,
+                                color: isCompleted ? AppColors.darkRed : AppColors.primaryYellow,
                                 borderRadius: BorderRadius.circular(Insets.xsm),
                               ),
                               child: Row(
@@ -291,14 +317,14 @@ class _ServiceInProgressState extends State<ServiceInProgress> {
                                 children: [
                                   Icon(
                                     Icons.phone_outlined,
-                                    color: widget.isCompleted ? AppColors.naturalWhite : AppColors.primaryRed,
+                                    color: isCompleted ? AppColors.naturalWhite : AppColors.primaryRed,
                                   ),
                                   SizedBox(width: Insets.xxs),
                                   Text(
                                     UserMessages.call,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      color: widget.isCompleted ? AppColors.naturalWhite : AppColors.naturalBlack,
+                                      color: isCompleted ? AppColors.naturalWhite : AppColors.naturalBlack,
                                     ),
                                   ),
                                 ],
@@ -334,7 +360,7 @@ class _ServiceInProgressState extends State<ServiceInProgress> {
                         ),
                       ),
                       SizedBox(height: AppSizes.h(context, 20)),
-                      if (widget.isCompleted) ...[
+                      if (isCompleted) ...[
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: Insets.sm),
                           child: Column(
@@ -411,7 +437,7 @@ class _ServiceInProgressState extends State<ServiceInProgress> {
                         ),
                       ],
                       SizedBox(height: AppSizes.h(context, 15)),
-                      if (widget.isCompleted) ...[
+                      if (isCompleted) ...[
                         const EndOtpView(),
                       ] else ...[
                         const ServiceProgressWidget(),
