@@ -14,12 +14,11 @@ class LandingScreen extends StatefulWidget {
 
 class _LandingScreenState extends State<LandingScreen> {
   int currentIndex = 0;
-
   late PageController _pageController;
 
   final List<Widget> pages = [
     const HomePage(),
-    BookingHistory(),
+     BookingHistory(),
     const MessageScreen(),
     ProfileScreen(user: UserModel.mock()),
   ];
@@ -54,7 +53,7 @@ class _LandingScreenState extends State<LandingScreen> {
   double _getPosition(double width) {
     int itemCount = icons.length;
     double itemWidth = width / itemCount;
-    return itemWidth * currentIndex + itemWidth / 2 - AppSizes.w(context, 30);
+    return itemWidth * currentIndex + itemWidth / 2 - AppSizes.w(context, 24);
   }
 
   @override
@@ -72,14 +71,14 @@ class _LandingScreenState extends State<LandingScreen> {
             final width = constraints.maxWidth;
 
             return SizedBox(
-              height: AppSizes.h(context, 82),
+              height: AppSizes.h(context, 50),
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
                   Positioned.fill(
                     child: CustomPaint(
                       painter: NavBarPainter(
-                        centerX: _getPosition(width) + AppSizes.w(context, 30),
+                        centerX: _getPosition(width) + AppSizes.w(context, 24),
                       ),
                     ),
                   ),
@@ -93,21 +92,19 @@ class _LandingScreenState extends State<LandingScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              SizedBox(height: AppSizes.h(context, 18)),
-                              Icon(
-                                icons[index],
-                                color: isSelected
-                                    ? AppColors.selectedNavColor
-                                    : AppColors.unselectedNavColor,
-                              ),
-                              SizedBox(height: AppSizes.h(context, 4)),
+                              SizedBox(height: AppSizes.h(context, 12)),
+                              if (!isSelected)
+                                Icon(
+                                  icons[index],
+                                  size: AppSizes.w(context, 20),
+                                  color: AppColors.naturalWhite,
+                                ),
+                              SizedBox(height: AppSizes.h(context, 2)),
                               Text(
                                 labels[index],
                                 style: TextStyle(
-                                  color: isSelected
-                                      ? AppColors.selectedNavColor
-                                      : AppColors.unselectedNavColor,
-                                  fontSize: AppSizes.w(context, 11),
+                                  color: AppColors.naturalWhite,
+                                  fontSize: AppSizes.w(context, 10),
                                 ),
                               ),
                             ],
@@ -120,24 +117,24 @@ class _LandingScreenState extends State<LandingScreen> {
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeOut,
                     left: _getPosition(width),
-                    top: -AppSizes.h(context, 38),
+                    top: -AppSizes.h(context, 30),
                     child: Container(
-                      height: AppSizes.h(context, 60),
-                      width: AppSizes.w(context, 60),
+                      height: AppSizes.h(context, 48),
+                      width: AppSizes.w(context, 48),
                       decoration: BoxDecoration(
-                        color: AppColors.selectedNavColor,
+                        color: AppColors.chatBgColor,
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
                             color: AppColors.naturalBlack.withOpacity(0.25),
                             blurRadius: AppSizes.w(context, 10),
-                          )
+                          ),
                         ],
                       ),
                       child: Icon(
                         icons[currentIndex],
                         color: AppColors.naturalWhite,
-                        size: AppSizes.w(context, 28),
+                        size: AppSizes.w(context, 22),
                       ),
                     ),
                   ),
@@ -159,30 +156,30 @@ class NavBarPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.navBarBgColor
+      ..color = AppColors.chatBgColor
       ..style = PaintingStyle.fill;
 
     final path = Path();
 
     path.moveTo(0, 0);
-    path.lineTo(centerX - 65, 0);
+    path.lineTo(centerX - 44.2, 0);
     path.quadraticBezierTo(
-      centerX - 45, 0,
-      centerX - 35, 15,
+      centerX - 29.75, 0,
+      centerX - 22.1, 10.2,
     );
     path.quadraticBezierTo(
-      centerX, 55,
-      centerX + 35, 15,
+      centerX, 38.25,
+      centerX + 22.1, 10.2,
     );
     path.quadraticBezierTo(
-      centerX + 45, 0,
-      centerX + 65, 0,
+      centerX + 29.75, 0,
+      centerX + 44.2, 0,
     );
     path.lineTo(size.width, 0);
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
     path.close();
-    
+
     canvas.drawShadow(path, AppColors.naturalBlack, 6, true);
     canvas.drawPath(path, paint);
   }
