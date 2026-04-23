@@ -1,8 +1,17 @@
 
+import 'package:provider/provider.dart';
+import 'package:zeerah/core/providers/address_provider.dart';
 import 'package:zeerah/core/common/app_exports.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AddressProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

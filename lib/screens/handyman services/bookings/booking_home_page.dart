@@ -20,6 +20,8 @@ class _BookingHomePageState extends State<BookingHomePage> {
       appBar: AppBar(
         titleSpacing: 0,
         toolbarHeight: AppSizes.h(context, 80),
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
         leading: Padding(
           padding: EdgeInsets.only(top: AppSizes.h(context, 10)),
           child: IconButton(
@@ -28,18 +30,19 @@ class _BookingHomePageState extends State<BookingHomePage> {
             },
             icon: const Icon(
               Icons.arrow_back_ios,
-              color: AppColors.naturalWhite,
+              color: AppColors.naturalBlack,
             ),
           ),
         ),
-        backgroundColor: AppColors.primaryRed,
+        backgroundColor: AppColors.naturalWhite,
         title: Padding(
           padding: EdgeInsets.only(top: AppSizes.h(context, 10)),
           child: Text(
             "${widget.service.title} Booking",
             style: TextStyle(
-              color: AppColors.naturalWhite,
-              fontSize: AppSizes.w(context, 20),
+              color: AppColors.naturalBlack,
+              fontWeight: FontWeight.w600,
+              fontSize: AppSizes.w(context, 19),
             ),
           ),
         ),

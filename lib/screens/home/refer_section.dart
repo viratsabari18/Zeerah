@@ -1,3 +1,5 @@
+import 'dart:math';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zeerah/core/common/app_exports.dart';
 import 'package:zeerah/core/services.dart/clipboard_service.dart';
 
@@ -9,107 +11,118 @@ class ReferSection extends StatefulWidget {
 }
 
 class _ReferSectionState extends State<ReferSection> {
-  String refercode = "7H56TF";
+  late String referCode;
+
+  @override
+  void initState() {
+    super.initState();
+    referCode = _generateReferCode();
+  }
+
+  String _generateReferCode() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    final random = Random();
+    return String.fromCharCodes(Iterable.generate(
+        6, (_) => chars.codeUnitAt(random.nextInt(chars.length))));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          /// MAIN CARD
+          // Main Referral Card
           Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(20),
+              color: const Color(0xFFF9F9F9),
+              borderRadius: BorderRadius.circular(30),
             ),
             child: Column(
               children: [
-                /// IMAGE
                 Image.asset(
-                  "lib/assets/images/refer_section.webp", // 👈 add your image
-                  height: 200,
-                  width: 190,
+                  'lib/assets/images/hands.png',
+                  height: 300,
+                  fit: BoxFit.contain,
                 ),
-
-                const SizedBox(height: 12),
-
-                /// TEXT
+                const SizedBox(height: 20),
                 Text(
-                  "Get a friend to unfazzed",
-                  style: TextStyles.bodyMedium.copyWith(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
+                  'Get a friend to unfazzed',
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.naturalBlack,
                   ),
                 ),
-
-                const SizedBox(height: 6),
-
-                /// GET ₹350
+                const SizedBox(height: 12),
                 RichText(
                   text: TextSpan(
+                    style: GoogleFonts.poppins(
+                      fontSize: 36,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.naturalBlack,
+                    ),
                     children: [
+                      const TextSpan(text: 'Get '),
                       TextSpan(
-                        text: "Get ",
-                        style: TextStyles.bodyMedium.copyWith(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.naturalBlack,
-                        ),
-                      ),
-                      TextSpan(
-                        text: "₹50",
-                        style: TextStyles.bodyMedium.copyWith(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                        ),
+                        text: '₹50',
+                        style: const TextStyle(color: AppColors.primaryRed),
                       ),
                     ],
                   ),
                 ),
-
-                const SizedBox(height: 6),
-
+                const SizedBox(height: 12),
                 Text(
-                  "Your friend get 25 off on their first \n order",
+                  'Your friend get 25 off on their first\norder',
                   textAlign: TextAlign.center,
-                  style: TextStyles.bodyMedium.copyWith(
+                  style: GoogleFonts.poppins(
                     fontSize: 14,
-                    color: AppColors.naturalBlack,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.naturalBlack.withOpacity(0.8),
+                    height: 1.4,
                   ),
                 ),
-
-                const SizedBox(height: 12),
-
-                InkWell(
-                  onTap: () {
-                    copydata(context, refercode);
-                  },
-
+                const SizedBox(height: 20),
+                // Promo Code Pill
+                GestureDetector(
+                  onTap: () => copydata(context, referCode),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
+                      horizontal: 30,
+                      vertical: 14,
                     ),
                     decoration: BoxDecoration(
-                      color: Color(0xFFF6EDED),
-                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 15,
+                          spreadRadius: 0,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          refercode,
-                          style: TextStyles.bodyMedium.copyWith(
-                            fontWeight: FontWeight.w600,
+                          referCode,
+                          style: GoogleFonts.poppins(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 2,
+                            color: AppColors.naturalBlack,
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        const Icon(Icons.copy, size: 16),
+                        const SizedBox(width: 12),
+                        const Icon(
+                          Icons.copy_rounded,
+                          size: 22,
+                          color: AppColors.primaryRed,
+                        ),
                       ],
                     ),
                   ),
@@ -117,74 +130,98 @@ class _ReferSectionState extends State<ReferSection> {
               ],
             ),
           ),
-
-          const SizedBox(height: 20),
-
-          /// HOW IT WORKS
-          Text(
-            "How it works",
-            style: TextStyles.bodyMedium.copyWith(
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-            ),
-          ),
-
-          const SizedBox(height: 10),
-
-          /// STEP CHIP
+          const SizedBox(height: 32),
+          // How it works section
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.grey.shade200,
-              borderRadius: BorderRadius.circular(20),
+              color: const Color(0xFFF9F9F9),
+              borderRadius: BorderRadius.circular(30),
             ),
-            child: Text(
-              "Share the link with your friend",
-              style: TextStyles.bodyMedium.copyWith(fontSize: 12),
-            ),
-          ),
-
-          const SizedBox(height: 14),
-
-          /// SHARE BUTTON
-          SizedBox(
-            width: double.infinity,
-            height: 45,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'How it works',
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.naturalBlack,
+                  ),
                 ),
-              ),
-              child: Text(
-                "Share invite link",
-                style: TextStyle(color: AppColors.naturalBlack),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 10),
-
-          /// OUTLINE BUTTON
-          SizedBox(
-            width: double.infinity,
-            height: 45,
-            child: OutlinedButton(
-              onPressed: () {},
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Colors.red),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF1F1F1),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Text(
+                    'Share the link with your friend',
+                    style: GoogleFonts.poppins(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.naturalBlack,
+                    ),
+                  ),
                 ),
-              ),
-              child: const Text(
-                "Find friends to refer",
-                style: TextStyle(color: Colors.red),
-              ),
+                const SizedBox(height: 24),
+                // Primary Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 54,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFE30606),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      'Share invite link',
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                // Secondary Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 54,
+                  child: OutlinedButton(
+                    onPressed: () {},
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(
+                        color: Color(0xFFE30606),
+                        width: 1.5,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      'Find friends to refer',
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFFE30606),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
+          const SizedBox(height: 32),
         ],
       ),
     );

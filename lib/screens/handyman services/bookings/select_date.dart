@@ -16,16 +16,13 @@ class _SelectDateState extends State<SelectDate> {
   String selectedSlot = UserMessages.morning;
   String selectedTime = "10:00 AM";
 
-  final List<String> timeSlots = [
-    "9:00 AM",
-    "10:00 AM",
-    "11:00 AM",
-    "12:00 PM",
-    "1:00 PM",
-    "2:00 PM",
-    "3:00 PM",
-    "4:00 PM",
-  ];
+  final Map<String, List<String>> slotsByPeriod = {
+    UserMessages.morning: ["8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM"],
+    UserMessages.afternoon: ["12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM"],
+    UserMessages.evening: ["4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM"],
+  };
+
+  List<String> get timeSlots => slotsByPeriod[selectedSlot] ?? [];
 
   Widget innerShadowChip({
     required String text,
@@ -58,104 +55,28 @@ class _SelectDateState extends State<SelectDate> {
     int firstDay = DateTime(currentMonth.year, currentMonth.month, 1).weekday;
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: AppSizes.h(context, 10)),
-        Text(
-          UserMessages.selectDateTime,
-          style: TextStyle(
-            fontSize: AppSizes.w(context, 18),
-            fontWeight: FontWeight.w600,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: Insets.sm),
+          child: Text(
+            UserMessages.availableTimeSlots,
+            style: TextStyle(
+              fontSize: AppSizes.w(context, 18),
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         SizedBox(height: AppSizes.h(context, 4)),
-        Text(
-          UserMessages.choosePreferredSchedule,
-          style: TextStyle(color: Colors.grey.shade600),
-        ),
-        SizedBox(height: AppSizes.h(context, 16)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              icon: Icon(Icons.arrow_back_ios, size: AppSizes.w(context, 16)),
-              onPressed: () {
-                setState(() {
-                  currentMonth = DateTime(currentMonth.year, currentMonth.month - 1);
-                });
-              },
-            ),
-            Text(
-              DateFormat("MMMM yyyy").format(currentMonth),
-              style: const TextStyle(fontWeight: FontWeight.w500),
-            ),
-            IconButton(
-              icon: Icon(Icons.arrow_forward_ios, size: AppSizes.w(context, 16)),
-              onPressed: () {
-                setState(() {
-                  currentMonth = DateTime(currentMonth.year, currentMonth.month + 1);
-                });
-              },
-            ),
-          ],
-        ),
-        SizedBox(height: AppSizes.h(context, 12)),
-        Row(
-          children: UserMessages.weekDays
-              .map((e) => Expanded(
-                    child: Center(
-                      child: Text(e, style: const TextStyle(color: Colors.grey)),
-                    ),
-                  ))
-              .toList(),
-        ),
-        SizedBox(height: AppSizes.h(context, 8)),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: daysInMonth + (firstDay - 1),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 7,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: Insets.sm),
+          child: Text(
+            "Booking for Today (${DateFormat("d MMM, yyyy").format(DateTime.now())})",
+            style: TextStyle(color: Colors.grey.shade600),
           ),
-          itemBuilder: (context, index) {
-            if (index < firstDay - 1) {
-              return const SizedBox();
-            }
-
-            int day = index - (firstDay - 2);
-            DateTime date = DateTime(currentMonth.year, currentMonth.month, day);
-            bool isSelected = DateUtils.isSameDay(date, selectedDate);
-
-            return GestureDetector(
-              onTap: () {
-                setState(() => selectedDate = date);
-              },
-              child: Center(
-                child: Container(
-                  width: AppSizes.w(context, 32),
-                  height: AppSizes.h(context, 32),
-                  decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primaryRed : Colors.transparent,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Text(
-                      "$day",
-                      style: TextStyle(
-                        color: isSelected ? AppColors.naturalWhite : AppColors.naturalBlack,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
         ),
         SizedBox(height: AppSizes.h(context, 16)),
-        Text(
-          UserMessages.availableTimeSlots,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: AppSizes.h(context, 10)),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: UserMessages.timeSlotsCategory.map((slot) {
@@ -165,52 +86,58 @@ class _SelectDateState extends State<SelectDate> {
                 text: slot,
                 isSelected: selectedSlot == slot,
                 onTap: () {
-                  setState(() => selectedSlot = slot);
+                  setState(() {
+                    selectedSlot = slot;
+                    selectedTime = timeSlots.first;
+                  });
                 },
               ),
             );
           }).toList(),
         ),
         SizedBox(height: AppSizes.h(context, 12)),
-        Wrap(
-          spacing: Insets.xs,
-          runSpacing: Insets.xs,
-          children: timeSlots.map((time) {
-            bool isSelected = selectedTime == time;
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: Insets.sm),
+          child: Wrap(
+            spacing: Insets.xs,
+            runSpacing: Insets.xs,
+            children: timeSlots.map((time) {
+              bool isSelected = selectedTime == time;
 
-            return GestureDetector(
-              onTap: () {
-                setState(() => selectedTime = time);
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
-                decoration: BoxDecoration(
-                  color: isSelected ? AppColors.primaryRed : AppColors.naturalWhite,
-                  borderRadius: BorderRadius.circular(Insets.md),
-                  boxShadow: isSelected
-                      ? []
-                      : [
-                          BoxShadow(
-                            color: AppColors.naturalBlack.withOpacity(0.1),
-                            offset: const Offset(2, 2),
-                            blurRadius: AppSizes.w(context, 6),
-                          ),
-                          BoxShadow(
-                            color: AppColors.naturalWhite.withOpacity(0.9),
-                            offset: const Offset(-2, -2),
-                            blurRadius: AppSizes.w(context, 6),
-                          ),
-                        ],
-                ),
-                child: Text(
-                  time,
-                  style: TextStyle(
-                    color: isSelected ? AppColors.naturalWhite : AppColors.naturalBlack,
+              return GestureDetector(
+                onTap: () {
+                  setState(() => selectedTime = time);
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
+                  decoration: BoxDecoration(
+                    color: isSelected ? AppColors.primaryRed : AppColors.naturalWhite,
+                    borderRadius: BorderRadius.circular(Insets.md),
+                    boxShadow: isSelected
+                        ? []
+                        : [
+                            BoxShadow(
+                              color: AppColors.naturalBlack.withOpacity(0.1),
+                              offset: const Offset(2, 2),
+                              blurRadius: AppSizes.w(context, 6),
+                            ),
+                            BoxShadow(
+                              color: AppColors.naturalWhite.withOpacity(0.9),
+                              offset: const Offset(-2, -2),
+                              blurRadius: AppSizes.w(context, 6),
+                            ),
+                          ],
+                  ),
+                  child: Text(
+                    time,
+                    style: TextStyle(
+                      color: isSelected ? AppColors.naturalWhite : AppColors.naturalBlack,
+                    ),
                   ),
                 ),
-              ),
-            );
-          }).toList(),
+              );
+            }).toList(),
+          ),
         ),
         SizedBox(height: AppSizes.h(context, 20)),
         Container(
@@ -230,7 +157,7 @@ class _SelectDateState extends State<SelectDate> {
                       color: AppColors.calendarBg,
                       borderRadius: BorderRadius.circular(Insets.xsm),
                     ),
-                    child: const Icon(Icons.calendar_today),
+                    child: const Icon(Icons.access_time_filled, color: AppColors.primaryRed),
                   ),
                   Positioned(
                     bottom: AppSizes.h(context, 5),
@@ -257,7 +184,7 @@ class _SelectDateState extends State<SelectDate> {
                       style: TextStyle(fontSize: AppSizes.w(context, 12)),
                     ),
                     Text(
-                      "${DateFormat("EEE, d MMM yyyy").format(selectedDate)} · $selectedTime",
+                      "Today, ${DateFormat("d MMM").format(DateTime.now())} · $selectedTime",
                       style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                   ],

@@ -17,6 +17,8 @@ class AppRoutes {
   static const String walletHistory = '/walletHistory';
   static const String helpDesk = '/helpDesk';
   static const String messages = '/messages';
+  static const String selectLocation = '/selectLocation';
+  static const String confirmLocation = '/confirmLocation';
   static const String referral = '/referral';
 
   static const String notificationHistory = "/notificationHistory";

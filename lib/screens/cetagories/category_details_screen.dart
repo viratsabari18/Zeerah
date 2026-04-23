@@ -121,10 +121,10 @@ class _ServiceCard extends StatelessWidget {
                 child: const Text(
                   'View Details',
                   style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.blueAccent,
-                    decoration: TextDecoration.underline,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                   
                   ),
                 ),
               ),

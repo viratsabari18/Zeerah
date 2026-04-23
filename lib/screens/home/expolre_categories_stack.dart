@@ -351,16 +351,16 @@ class _BookNowButtonState extends State<_BookNowButton> {
                   Center(
                     child: Opacity(
                       opacity: (1 - (_dragOffset / (totalWidth - 60))).clamp(0.2, 1.0),
-                      child: const Text('Book Now', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
+                      child: const Text('Swipe Now', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
                     ),
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
-                      width: 52,
-                      height: 52,
+                      width: 48,
+                      height: 48,
                       decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white.withOpacity(0.15)),
-                      child: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 20),
+                      child: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 18),
                     ),
                   ),
                   Positioned(
@@ -369,10 +369,10 @@ class _BookNowButtonState extends State<_BookNowButton> {
                       onHorizontalDragUpdate: (d) => _onDragUpdate(d, totalWidth),
                       onHorizontalDragEnd: (d) => _onDragEnd(d, totalWidth),
                       child: Container(
-                        width: 52,
-                        height: 52,
+                        width: 48,
+                        height: 48,
                         decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFF131B1B)),
-                        child: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 20),
+                        child: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 18),
                       ),
                     ),
                   ),

@@ -10,96 +10,106 @@ class HomeOfferSection extends StatelessWidget {
   }
 
   Widget _buildOfferSection(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const SizedBox(height: 32), // Added spacing to shift the section down
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            'Offer for you',
-            style: GoogleFonts.poppins(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.naturalBlack,
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(35),
+          topRight: Radius.circular(35),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(height: 24),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Offer for you',
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: AppColors.naturalBlack,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 12),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SizedBox(
-            height: 230,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Featured Large Card (Left)
-                Expanded(flex: 11, child: _buildFeaturedOfferCard()),
-                const SizedBox(width: 10),
-                // 2x2 Grid of Small Cards (Right)
-                Expanded(
-                  flex: 19,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: _buildSmallOfferCard(
-                                title: 'Bundle\n& Save',
-                                subtitle: 'Up to 25%',
-                                footer: 'Book 2+ Service',
-                                color: const Color(0xFFFF6B6B),
-                                icon: Icons.redeem,
+          const SizedBox(height: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SizedBox(
+              height: 230,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Featured Large Card (Left)
+                  Expanded(flex: 11, child: _buildFeaturedOfferCard()),
+                  const SizedBox(width: 10),
+                  // 2x2 Grid of Small Cards (Right)
+                  Expanded(
+                    flex: 19,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: _buildSmallOfferCard(
+                                  title: 'Bundle\n& Save',
+                                  subtitle: 'Up to 25%',
+                                  footer: 'Book 2+ Service',
+                                  color: const Color(0xFFFF6B6B),
+                                  icon: Icons.redeem,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: _buildSmallOfferCard(
-                                title: 'Refer\n& Earn',
-                                subtitle: '50 Points',
-                                footer: 'Invite a friend',
-                                color: const Color(0xFF5D8BF4),
-                                icon: Icons.account_balance_wallet,
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: _buildSmallOfferCard(
+                                  title: 'Refer\n& Earn',
+                                  subtitle: '50 Points',
+                                  footer: 'Invite a friend',
+                                  color: const Color(0xFF5D8BF4),
+                                  icon: Icons.account_balance_wallet,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: _buildSmallOfferCard(
-                                title: 'Weekend\nSpecial',
-                                subtitle: 'Up to 15%',
-                                footer: 'Sat & Sun Only',
-                                color: const Color(0xFF58E067),
-                                icon: Icons.calendar_today,
+                        const SizedBox(height: 10),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: _buildSmallOfferCard(
+                                  title: 'Weekend\nSpecial',
+                                  subtitle: 'Up to 15%',
+                                  footer: 'Sat & Sun Only',
+                                  color: const Color(0xFF58E067),
+                                  icon: Icons.calendar_today,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: _buildSmallOfferCard(
-                                title: 'First Booking\nOffer',
-                                subtitle: '20% OFF',
-                                footer: 'For new user\'s only',
-                                color: const Color(0xFFD600D6),
-                                icon: Icons.redeem,
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: _buildSmallOfferCard(
+                                  title: 'First Booking\nOffer',
+                                  subtitle: '20% OFF',
+                                  footer: 'For new user\'s only',
+                                  color: const Color(0xFFD600D6),
+                                  icon: Icons.redeem,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+          const SizedBox(height: 24),
+        ],
+      ),
     );
   }
 

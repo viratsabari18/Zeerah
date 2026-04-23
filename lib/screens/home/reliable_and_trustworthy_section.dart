@@ -53,15 +53,15 @@ class ReliableAndTrustworthySection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildCard(
-                image: "lib/assets/images/trustful_section_image1.webp",
+                image: "lib/assets/images/girl2.png",
                 title: "Verified Professionals You Can Trust",
               ),
               _buildCard(
-                image: "lib/assets/images/trustful_section_image2.webp",
+                image: "lib/assets/images/girl3.png",
                 title: "Well Trained To Deliver Great Service",
               ),
               _buildCard(
-                image: "lib/assets/images/trustful_section_image3.webp",
+                image: "lib/assets/images/girl4.png",
                 title: "Safe, Reliable & Consistent Every Single Time",
               ),
             ],
@@ -82,7 +82,7 @@ class ReliableAndTrustworthySection extends StatelessWidget {
         children: [
           /// Image Container
           Container(
-            height: 110,
+            height: 160,
             margin: const EdgeInsets.symmetric(horizontal: 4),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
@@ -93,6 +93,12 @@ class ReliableAndTrustworthySection extends StatelessWidget {
               image,
               fit: BoxFit.cover, // ✅ FIX: fills fully (no grey bottom issue)
               width: double.infinity,
+              cacheHeight: 500, // Optimize loading for large images
+              errorBuilder: (context, error, stackTrace) {
+                return const Center(
+                  child: Icon(Icons.broken_image, color: Colors.grey, size: 30),
+                );
+              },
             ),
           ),
 

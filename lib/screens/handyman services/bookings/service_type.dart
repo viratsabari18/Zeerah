@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 import 'package:zeerah/core/common/app_exports.dart';
-import 'package:zeerah/core/services.dart/location_service.dart';
+import 'package:zeerah/core/providers/address_provider.dart';
 import 'package:zeerah/widgets/common/map_picker_screen.dart';
 
 class ServiceType extends StatefulWidget {
@@ -47,61 +46,7 @@ class _ServiceTypeState extends State<ServiceType> {
     super.dispose();
   }
 
-  /// 📍 Get current location and update address field
-  Future<void> getCurrentLocationAddress() async {
-    try {
-      bool serviceEnabled;
-      LocationPermission permission;
 
-      serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        _showSnackBar(UserMessages.locationServicesDisabled);
-        return;
-      }
-
-      permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          _showSnackBar(UserMessages.locationPermissionDenied);
-          return;
-        }
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        _showSnackBar(UserMessages.locationPermissionPermanentlyDenied);
-        return;
-      }
-
-      // Show loading indicator
-      _showSnackBar(UserMessages.gettingYourLocation);
-
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-          position.latitude, position.longitude);
-
-      Placemark place = placemarks.first;
-      
-      // Build address string
-      String address = [
-        place.street,
-        place.locality,
-        place.administrativeArea,
-        place.postalCode
-      ].where((part) => part != null && part.isNotEmpty).join(", ");
-
-      // Update the text field
-      setState(() {
-        addressController.text = address;
-      });
-      
-      _showSnackBar(UserMessages.locationUpdatedSuccessfully);
-    } catch (e) {
-      _showSnackBar("${UserMessages.errorGettingLocation} $e");
-    }
-  }
 
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -228,21 +173,38 @@ class _ServiceTypeState extends State<ServiceType> {
 
           SizedBox(height: AppSizes.h(context, 8)),
 
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: Insets.sm),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Insets.xsm),
-              border: Border.all(color: Colors.grey.shade300),
-            ),
-            child: TextField(
-              controller: addressController,
-              maxLines: 3,
-              decoration: InputDecoration(
-                hintText: UserMessages.enterYourAddress,
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.all(Insets.xsm),
-              ),
-            ),
+          Consumer<AddressProvider>(
+            builder: (context, addressProvider, child) {
+              // Sync address controller if provider has a selected location
+              if (addressProvider.selectedLocation != null) {
+                addressController.text = addressProvider.selectedLocation!['address'];
+              }
+              
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.selectLocation);
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: Insets.sm),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(Insets.xsm),
+                    border: Border.all(color: Colors.grey.shade300),
+                  ),
+                  child: TextField(
+                    controller: addressController,
+                    maxLines: 3,
+                    readOnly: true,
+                    onTap: () => Navigator.pushNamed(context, AppRoutes.selectLocation),
+                    decoration: InputDecoration(
+                      hintText: UserMessages.enterYourAddress,
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(Insets.xsm),
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
 
           SizedBox(height: AppSizes.h(context, 10)),
@@ -251,30 +213,12 @@ class _ServiceTypeState extends State<ServiceType> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: Insets.sm),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () async {
-                    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => MapPickerScreen()),
-                    );
-
-                    if (result != null && result is String) {
-                      setState(() {
-                        addressController.text = result;
-                      });
-                    }
-                  },
+                  onTap: () => Navigator.pushNamed(context, AppRoutes.selectLocation),
                   child: Text(
                     UserMessages.chooseFromMap,
-                    style: const TextStyle(color: Colors.blue),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: getCurrentLocationAddress,
-                  child: Text(
-                    UserMessages.useCurrentLocation,
                     style: const TextStyle(color: Colors.blue),
                   ),
                 ),

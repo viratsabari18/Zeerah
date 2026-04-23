@@ -19,6 +19,8 @@ import 'package:zeerah/screens/profile/wallet_history_screen.dart';
 import 'package:zeerah/screens/profile/help_desk_screen.dart';
 import 'package:zeerah/screens/profile/referral_screen.dart';
 import 'package:zeerah/screens/message/message_screen.dart';
+import 'package:zeerah/screens/location/select_location_screen.dart';
+import 'package:zeerah/screens/location/confirm_location_screen.dart';
 import 'package:zeerah/core/common/app_exports.dart';
 import 'package:zeerah/screens/notifications/notification_history.dart';
 import 'package:zeerah/screens/profile%20kyc/kyc_verifaication.dart';
@@ -112,6 +114,8 @@ class AppPages {
     },
     AppRoutes.helpDesk: (context) => const HelpDeskScreen(),
     AppRoutes.messages: (context) => const MessageScreen(),
+    AppRoutes.selectLocation: (context) => const SelectLocationScreen(),
+    AppRoutes.confirmLocation: (context) => const ConfirmLocationScreen(),
     AppRoutes.referral: (context) {
       final user = ModalRoute.of(context)!.settings.arguments as UserModel? ?? UserModel.mock();
       return ReferralScreen(user: user);

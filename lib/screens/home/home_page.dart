@@ -34,13 +34,14 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   const HomeTopBanner(),
                   Transform.translate(
-                    offset: Offset(0, -Insets.sm),
+                    offset: const Offset(0, -30),
                     child: const HomeOfferSection(),
                   ),
                 ],
               ),
             ),
             const SliverToBoxAdapter(child: SearchBox()),
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
             SliverToBoxAdapter(
               child: ExpoloreCategories(
                 selectedIndex: _selectedCategoryIndex,

@@ -12,7 +12,15 @@ class SearchBox extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: Insets.xsm),
       height: AppSizes.h(context, 50),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Insets.xsm),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
       ),
       child: Row(
         children: [

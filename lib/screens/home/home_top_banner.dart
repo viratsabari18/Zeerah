@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
-
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:zeerah/core/providers/address_provider.dart';
 import 'package:zeerah/core/common/app_exports.dart';
 
 class HomeTopBanner extends StatefulWidget {
@@ -79,154 +81,147 @@ class _HomeTopBannerState extends State<HomeTopBanner> {
 
   Widget _topAppBar(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Insets.xs),
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: Insets.sm,
-          vertical: Insets.xs,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.naturalWhite.withOpacity(0.4),
-          borderRadius: BorderRadius.circular(Insets.sm),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.naturalBlack.withOpacity(0.1),
-              blurRadius: Insets.xs,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
+      padding: EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Left: Location Section
+          Expanded(
+            child: Consumer<AddressProvider>(
+              builder: (context, provider, _) {
+                final selectedLoc = provider.selectedLocation;
+                final String address = selectedLoc?['address'] ?? "Select your location";
+                
+                return GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, AppRoutes.selectLocation),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Image.asset(
-                        UserMessages.homeLocation,
-                        height: AppSizes.h(context, 24),
-                        color: AppColors.naturalBlack,
-                      ),
-                      SizedBox(width: Insets.xs),
-                      Text(
-                        "Shivam",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: AppSizes.w(context, 19),
-                          color: AppColors.naturalBlack,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: Insets.xxxs),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          "Dada Colony, Chaukh...",
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: AppSizes.w(context, 13),
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.naturalBlack,
-                          ),
-                        ),
-                      ),
-                      Icon(
-                        Icons.keyboard_arrow_down,
-                        size: AppSizes.w(context, 19),
-                        color: AppColors.naturalBlack,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(width: Insets.xs),
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Insets.xs,
-                    vertical: Insets.xxs,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.softPeach,
-                    borderRadius: BorderRadius.circular(Insets.md),
-                  ),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        UserMessages.homepageAppbarCoin,
-                        height: AppSizes.h(context, 20),
-                      ),
-                      SizedBox(width: Insets.xxs),
-                      Text(
-                        "₹200",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: AppSizes.w(context, 13),
-                        ),
-                      ),
-                      SizedBox(width: Insets.xxs),
-                      GestureDetector(
-                        onTap: () => Navigator.pushNamed(context, AppRoutes.profile),
-                        child: Container(
-                          padding: EdgeInsets.all(Insets.xxs),
-                          decoration: const BoxDecoration(
-                            color: AppColors.primaryRed,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.person,
-                            color: AppColors.naturalWhite,
-                            size: 18,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: Insets.xxxs),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.notificationHistory);
-                  },
-                  child: Stack(
-                    children: [
-                      Image.asset(
-                        UserMessages.homeNotifications,
-                        height: AppSizes.h(context, 32),
-                        color: AppColors.naturalBlack,
-                      ),
-                      Positioned(
-                        right: 0,
-                        top: -5,
-                        child: Container(
-                          padding: EdgeInsets.all(Insets.xxs),
-                          decoration: BoxDecoration(
-                            color: AppColors.brightYellow,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Text(
-                            "3",
-                            style: TextStyle(
-                              color: AppColors.naturalBlack,
-                              fontSize: AppSizes.w(context, 11),
+                      Row(
+                        children: [
+                          const Icon(Icons.near_me, color: Colors.black, size: 18),
+                          const SizedBox(width: 8),
+                          Text(
+                            "Shivam",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 17,
+                              color: Colors.black,
                             ),
                           ),
-                        ),
+                        ],
+                      ),
+                      const SizedBox(height: 2),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              address,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ),
+                         
+                        ],
                       ),
                     ],
                   ),
-                ),
-              ],
+                );
+              },
             ),
-          ],
-        ),
+          ),
+
+          // Right: Wallet + Profile and Notification
+          Row(
+            children: [
+              // Wallet + Profile Pill
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.85),
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(width: 8),
+                    Image.asset(
+                      UserMessages.homepageAppbarCoin,
+                      height: 24,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      "₹200",
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    GestureDetector(
+                      onTap: () => Navigator.pushNamed(context, AppRoutes.profile),
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFE53935),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const CircleAvatar(
+                          radius: 14,
+                          backgroundColor: Color(0xFFE53935),
+                          child: Icon(Icons.person, color: Colors.white, size: 18),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              // Notification Icon
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, AppRoutes.notificationHistory),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    const Icon(Icons.notifications, color: Colors.black, size: 32),
+                    Positioned(
+                      right: -2,
+                      top: -2,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFFFD600),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Text(
+                          "3",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

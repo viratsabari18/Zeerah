@@ -28,7 +28,7 @@ class ExpoloreCategories extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: AppSizes.h(context, 120),
+          height: AppSizes.h(context, 130),
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.symmetric(horizontal: Insets.xsm),
@@ -67,8 +67,8 @@ class _CategoryItem extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Insets.xxs),
       child: Container(
-        height: AppSizes.h(context, 80),
-        width: AppSizes.w(context, 80),
+        height: AppSizes.h(context, 90),
+        width: AppSizes.w(context, 90),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primaryYellow : AppColors.naturalWhite,
           shape: BoxShape.circle,
@@ -93,9 +93,16 @@ class _CategoryItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                height: AppSizes.h(context, 40),
-                width: AppSizes.w(context, 40),
-                child: Image.asset(image, fit: BoxFit.contain),
+                height: AppSizes.h(context, 55),
+                width: AppSizes.w(context, 55),
+                child: Image.asset(
+                  image,
+                  fit: BoxFit.contain,
+                  cacheWidth: 200, // Optimize loading for large images
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(Icons.broken_image, color: Colors.grey);
+                  },
+                ),
               ),
               SizedBox(height: Insets.xxs),
               Text(
