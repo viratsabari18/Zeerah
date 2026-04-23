@@ -77,4 +77,8 @@ static const Color notificationBgColor = Color(0xFFF4F4F4);
 static const Color notificationCardBg = Color(0xFFF7F7F7);
 static const Color rateNowColor = Color.fromRGBO(252, 128, 25, 1);
 
+static const Color selectedNavColor = Color.fromRGBO(106, 0, 183, 1);
+static const Color unselectedNavColor = Colors.grey;
+static const Color navBarBgColor = Color(0xFF1E1B4B); // Deep indigo
+
 }
