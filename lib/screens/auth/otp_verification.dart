@@ -119,7 +119,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                     ),
                     onPressed: () {
                       // Navigator.pop(context);
-                      Navigator.pushNamed(context, AppRoutes.homePage);
+                      Navigator.pushNamed(context, AppRoutes.landingPage);
                     },
                     child: Text(
                       UserMessages.continueMsg,

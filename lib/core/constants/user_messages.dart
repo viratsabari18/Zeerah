@@ -20,6 +20,15 @@ class UserMessages {
   static const String termsOfUse2 = "Terms of Use";
   static const String signInWithGoogle = "Sign In With Google";
   static const String signInWithMail = "Sign In With Mail";
+
+// landing page
+static const String home = "Home";
+static const String bookings = "Bookings";
+static const String chat = "Chat";
+static const String profile = "Profile";
+
+
+
   static const String exploreCategories = "Explore Categories";
   static const String offerForYou = "Offer for you";
   static const String bundleAndSave = "Bundle &\nSave";
@@ -87,8 +96,7 @@ static const String errorGettingLocation = "Error getting location:";
 // Add to UserMessages class in app_exports.dart
 static const String rateYourExperience = "Rate Your Experience";
 static const String custom = "Custom";
-static const String bookings = "Bookings";
-static const String home = "Home";
+
 static const String navigateToBookings = "Navigate to Bookings";
 static const String navigateToHome = "Navigate to Home";
 static const String poorService = "Poor Service!";
@@ -171,7 +179,7 @@ static const String serviceInProgressText = "Service in Progress";
 static const String completed = "Completed";
 static const String inProgress = "In progress";
 static const String call = "Call";
-static const String chat = "Chat";
+
 static const String completedLabel = "Completed: ";
 static const String completedTime = "2:40PM";
 static const String stoppageTimeLabel = "Stoppage time: ";
