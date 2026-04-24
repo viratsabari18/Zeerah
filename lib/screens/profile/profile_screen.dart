@@ -1,10 +1,14 @@
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:zeerah/core/common/app_exports.dart';
 import 'package:zeerah/core/models/user_model.dart';
+import 'package:zeerah/core/providers/address_provider.dart';
+import 'package:zeerah/core/providers/user_provider.dart';
+import 'package:zeerah/core/services/auth_service.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final UserModel user;
-  const ProfileScreen({super.key, required this.user});
+  final UserModel? user;
+  const ProfileScreen({super.key, this.user});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -12,11 +16,12 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late double _currentWallet;
+  final AuthService _authService = AuthService();
 
   @override
   void initState() {
     super.initState();
-    _currentWallet = widget.user.walletBalance;
+    _currentWallet = widget.user?.walletBalance ?? 200.0;
   }
 
   @override
@@ -56,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onTap: () => Navigator.pushNamed(
                     context,
                     AppRoutes.walletHistory,
-                    arguments: widget.user,
+                    arguments: widget.user ?? UserModel.mock(),
                   ),
                 ),
                 _ProfileMenuItem(
@@ -76,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     final result = await Navigator.pushNamed(
                       context,
                       AppRoutes.referral,
-                      arguments: widget.user,
+                      arguments: widget.user ?? UserModel.mock(),
                     );
 
                     if (result != null && result is Map<String, dynamic>) {
@@ -125,105 +130,116 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildTopProfileCard(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+    return Consumer<UserProvider>(
+      builder: (context, userProvider, _) {
+        final user = userProvider.user;
+        final name = userProvider.displayName;
+        final email = userProvider.email;
+        final photoUrl = user?.photoURL;
+
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.04),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Column(
-        children: [
-          // Profile Info Section
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              children: [
-                Container(
-                  width: 70,
-                  height: 70,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: const Color(0xFFEEEEEE), width: 1),
-                    image: DecorationImage(
-                      image: AssetImage(widget.user.profileImage),
-                      fit: BoxFit.cover,
+          child: Column(
+            children: [
+              // Profile Info Section
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: const Color(0xFFEEEEEE), width: 1),
+                        image: DecorationImage(
+                          image: photoUrl != null 
+                              ? NetworkImage(photoUrl) as ImageProvider
+                              : const AssetImage(UserMessages.profileImage),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: GoogleFonts.poppins(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Text(
+                            email,
+                            style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
+                  ],
                 ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.user.name,
+              ),
+              
+              const Divider(height: 1, color: Color(0xFFEEEEEE), indent: 20, endIndent: 20),
+              
+              // Wallet Section
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFF0ED),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.account_balance_wallet, color: AppColors.primaryRed, size: 24),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        'Wallet Balance',
                         style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
                           color: Colors.black,
                         ),
                       ),
-                      Text(
-                        widget.user.email,
-                        style: GoogleFonts.poppins(
-                          fontSize: 13,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
-              ],
-            ),
-          ),
-          
-          const Divider(height: 1, color: Color(0xFFEEEEEE), indent: 20, endIndent: 20),
-          
-          // Wallet Section
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFF0ED),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(Icons.account_balance_wallet, color: AppColors.primaryRed, size: 24),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Text(
-                    'Wallet Balance',
-                    style: GoogleFonts.poppins(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
                     ),
-                  ),
+                    Text(
+                      '₹${_currentWallet.toStringAsFixed(0)}',
+                      style: GoogleFonts.poppins(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primaryRed,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  '₹${_currentWallet.toStringAsFixed(0)}',
-                  style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primaryRed,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      }
     );
   }
 
@@ -298,7 +314,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 20),
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () async {
+          await _authService.signOut();
+          if (mounted) {
+            Provider.of<UserProvider>(context, listen: false).clearUser();
+            Provider.of<AddressProvider>(context, listen: false).clearAddressData();
+            Navigator.pushNamedAndRemoveUntil(
+              context, 
+              AppRoutes.signIn, 
+              (route) => false,
+            );
+          }
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
           foregroundColor: AppColors.primaryRed,

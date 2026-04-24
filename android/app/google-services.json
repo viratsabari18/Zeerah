@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "14780875671",
+    "project_id": "unfazzed",
+    "storage_bucket": "unfazzed.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14780875671:android:e07ed18f201480e43bfad2",
+        "android_client_info": {
+          "package_name": "com.example.zeerah"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACUyaRRPMjAx6GJN-mwEGjAzhnHmXjL0c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

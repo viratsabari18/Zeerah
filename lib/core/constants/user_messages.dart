@@ -272,4 +272,5 @@ static const String veriflyOtpImage = "lib/assets/images/otp_verifly.webp";
   static const String homepageBannerDummy2 = "lib/assets/images/homepage_banner_dummy_image2.png";
   static const String homepageBannerDummy3 = "lib/assets/images/homepage_banner_dummy_image3.png";
   static const String homepageBannerDummy = "lib/assets/images/homepage_banner_dummy_image.png";
+  static const String profileImage = "lib/assets/images/rider_image.png";
 }

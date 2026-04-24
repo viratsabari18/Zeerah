@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:zeerah/core/common/app_exports.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -15,10 +16,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
     Timer(const Duration(seconds: 3), () {
       if (mounted) {
-        Navigator.pushReplacementNamed(
-          context,
-          AppRoutes.homePage,
-        );
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          // User is already logged in, go to Home
+          Navigator.pushReplacementNamed(context, AppRoutes.landingPage);
+        } else {
+          // No user, go to Sign In
+          Navigator.pushReplacementNamed(context, AppRoutes.signIn);
+        }
       }
     });
   }

@@ -55,16 +55,17 @@ class _BookingHistoryState extends State<BookingHistory> {
       backgroundColor: AppColors.naturalWhite,
       appBar: AppBar(
         toolbarHeight: AppSizes.h(context, 70),
-        backgroundColor: AppColors.primaryRed,
-        leading: IconButton(
+        backgroundColor: AppColors.naturalWhite,
+       leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: AppColors.naturalWhite),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           UserMessages.bookingHistory,
           style: TextStyle(
-            color: AppColors.naturalWhite,
+            color: AppColors.naturalBlack,
             fontSize: AppSizes.w(context, 20),
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),

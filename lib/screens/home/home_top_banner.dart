@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:zeerah/core/providers/address_provider.dart';
 import 'package:zeerah/core/common/app_exports.dart';
+import 'package:zeerah/core/providers/user_provider.dart';
 
 class HomeTopBanner extends StatefulWidget {
   const HomeTopBanner({super.key});
@@ -102,13 +103,17 @@ class _HomeTopBannerState extends State<HomeTopBanner> {
                         children: [
                           const Icon(Icons.near_me, color: Colors.black, size: 18),
                           const SizedBox(width: 8),
-                          Text(
-                            "Shivam",
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 17,
-                              color: Colors.black,
-                            ),
+                          Consumer<UserProvider>(
+                            builder: (context, userProvider, _) {
+                              return Text(
+                                userProvider.firstName,
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 17,
+                                  color: Colors.black,
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),

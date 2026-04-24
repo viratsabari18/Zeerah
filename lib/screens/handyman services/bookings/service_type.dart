@@ -159,71 +159,128 @@ class _ServiceTypeState extends State<ServiceType> {
 
           SizedBox(height: AppSizes.h(context, 16)),
 
-          /// 📍 Address Title
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: Insets.sm),
-            child: Text(
-              UserMessages.yourAddress,
-              style: TextStyle(
-                fontSize: AppSizes.w(context, 17),
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-
-          SizedBox(height: AppSizes.h(context, 8)),
-
           Consumer<AddressProvider>(
             builder: (context, addressProvider, child) {
-              // Sync address controller if provider has a selected location
-              if (addressProvider.selectedLocation != null) {
-                addressController.text = addressProvider.selectedLocation!['address'];
-              }
+              final selectedLocation = addressProvider.selectedLocation;
               
-              return GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.selectLocation);
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: Insets.sm),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(Insets.xsm),
-                    border: Border.all(color: Colors.grey.shade300),
-                  ),
-                  child: TextField(
-                    controller: addressController,
-                    maxLines: 3,
-                    readOnly: true,
-                    onTap: () => Navigator.pushNamed(context, AppRoutes.selectLocation),
-                    decoration: InputDecoration(
-                      hintText: UserMessages.enterYourAddress,
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(Insets.xsm),
+              if (selectedLocation == null) {
+                return GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, AppRoutes.selectLocation),
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: Insets.sm),
+                    padding: EdgeInsets.all(Insets.sm),
+                    decoration: BoxDecoration(
+                      color: AppColors.naturalWhite,
+                      borderRadius: BorderRadius.circular(Insets.sm),
+                      border: Border.all(color: Colors.grey.shade300, width: 1),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.add_location_alt_outlined, color: AppColors.primaryRed),
+                        SizedBox(width: Insets.sm),
+                        Text(
+                          UserMessages.enterYourAddress,
+                          style: TextStyle(
+                            color: AppColors.naturalBlack.withOpacity(0.6),
+                            fontSize: AppSizes.w(context, 14),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const Spacer(),
+                        const Icon(Icons.chevron_right, color: Colors.grey),
+                      ],
                     ),
                   ),
+                );
+              }
+
+              String label = selectedLocation['label'] ?? "Address";
+              String displayAddress = selectedLocation['address'] ?? "";
+              
+              return Container(
+                margin: EdgeInsets.symmetric(horizontal: Insets.sm),
+                padding: EdgeInsets.all(Insets.sm),
+                decoration: BoxDecoration(
+                  color: AppColors.naturalWhite,
+                  borderRadius: BorderRadius.circular(Insets.sm),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.naturalBlack.withOpacity(0.08),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(Insets.xs),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryRed.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.location_on,
+                        color: AppColors.primaryRed,
+                        size: 24,
+                      ),
+                    ),
+                    SizedBox(width: Insets.sm),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            UserMessages.yourAddress,
+                            style: TextStyle(
+                              fontSize: AppSizes.w(context, 14),
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.naturalBlack,
+                            ),
+                          ),
+                          Text(
+                            label,
+                            style: TextStyle(
+                              fontSize: AppSizes.w(context, 11),
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.primaryRed,
+                            ),
+                          ),
+                          SizedBox(height: AppSizes.h(context, 2)),
+                          Text(
+                            displayAddress,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: AppSizes.w(context, 12),
+                              color: AppColors.naturalBlack.withOpacity(0.6),
+                              height: 1.3,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: Insets.sm),
+                    TextButton(
+                      onPressed: () => Navigator.pushNamed(context, AppRoutes.selectLocation),
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.symmetric(horizontal: Insets.xsm),
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: const Text(
+                        "Change",
+                        style: TextStyle(
+                          color: AppColors.primaryRed,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               );
             },
-          ),
-
-          SizedBox(height: AppSizes.h(context, 10)),
-
-          /// 🗺 Map Options
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: Insets.sm),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, AppRoutes.selectLocation),
-                  child: Text(
-                    UserMessages.chooseFromMap,
-                    style: const TextStyle(color: Colors.blue),
-                  ),
-                ),
-              ],
-            ),
           ),
 
           SizedBox(height: AppSizes.h(context, 16)),

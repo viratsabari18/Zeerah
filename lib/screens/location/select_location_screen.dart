@@ -130,10 +130,12 @@ class SelectLocationScreen extends StatelessWidget {
                     final String fullAddress = "${p.name ?? ''} ${p.subLocality ?? ''} ${p.locality ?? ''}".trim();
                     
                     final location = {
-                      'label': name,
+                      'label': 'Home',
+                      'icon': Icons.home_outlined,
                       'address': fullAddress,
                       'lat': position.latitude,
                       'lng': position.longitude,
+                      'distance': '0 m',
                     };
                     
                     Provider.of<AddressProvider>(context, listen: false).setSelectedLocation(location);

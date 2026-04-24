@@ -33,8 +33,14 @@ class AppPages {
     AppRoutes.splash: (context) => SplashScreen(),
     AppRoutes.signIn: (context) => SignInScreen(),
     AppRoutes.landingPage:(context)=>LandingScreen(),
-    AppRoutes.otpVerifly: (context) => OtpVerification(),
-    AppRoutes.homePage: (context) => const HomePage(),
+    AppRoutes.otpVerifly: (context) {
+      final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      return OtpVerification(
+        verificationId: args['verificationId'],
+        phoneNumber: args['phoneNumber'],
+      );
+    },
+    AppRoutes.homePage: (context) => LandingScreen(),
     AppRoutes.serviceCategories: (context) {
       final title = ModalRoute.of(context)!.settings.arguments as String;
       return ServiceCetagorices(title: title);

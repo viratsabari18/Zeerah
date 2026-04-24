@@ -71,7 +71,7 @@ class _LandingScreenState extends State<LandingScreen> {
             final width = constraints.maxWidth;
 
             return SizedBox(
-              height: AppSizes.h(context, 50),
+              height: AppSizes.h(context, 60),
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
@@ -92,7 +92,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              SizedBox(height: AppSizes.h(context, 12)),
+                              SizedBox(height: AppSizes.h(context, 18)),
                               if (!isSelected)
                                 Icon(
                                   icons[index],
@@ -102,6 +102,8 @@ class _LandingScreenState extends State<LandingScreen> {
                               SizedBox(height: AppSizes.h(context, 2)),
                               Text(
                                 labels[index],
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: AppColors.naturalWhite,
                                   fontSize: AppSizes.w(context, 10),
