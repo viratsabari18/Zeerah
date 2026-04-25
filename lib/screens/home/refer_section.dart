@@ -1,6 +1,7 @@
-import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:zeerah/core/common/app_exports.dart';
+import 'package:zeerah/core/providers/user_provider.dart';
 import 'package:zeerah/core/services.dart/clipboard_service.dart';
 
 class ReferSection extends StatefulWidget {
@@ -11,23 +12,11 @@ class ReferSection extends StatefulWidget {
 }
 
 class _ReferSectionState extends State<ReferSection> {
-  late String referCode;
-
-  @override
-  void initState() {
-    super.initState();
-    referCode = _generateReferCode();
-  }
-
-  String _generateReferCode() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    final random = Random();
-    return String.fromCharCodes(Iterable.generate(
-        6, (_) => chars.codeUnitAt(random.nextInt(chars.length))));
-  }
-
   @override
   Widget build(BuildContext context) {
+    return Consumer<UserProvider>(
+      builder: (context, userProvider, _) {
+        final referCode = userProvider.referralCode;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -224,6 +213,8 @@ class _ReferSectionState extends State<ReferSection> {
           const SizedBox(height: 32),
         ],
       ),
+    );
+      },
     );
   }
 }

@@ -1,52 +1,58 @@
 import 'package:zeerah/core/common/app_exports.dart';
+import 'package:zeerah/core/providers/dashboard_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ExpoloreCategories extends StatelessWidget {
-  final int selectedIndex;
-  final ValueChanged<int> onCategorySelected;
-
-  const ExpoloreCategories({
-    super.key,
-    required this.selectedIndex,
-    required this.onCategorySelected,
-  });
+  const ExpoloreCategories({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final categories = CategoryData.categories;
+    return Consumer<DashboardProvider>(
+      builder: (context, dashboardProvider, _) {
+        final categories = dashboardProvider.categories;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: Insets.sm),
-          child: Text(
-            UserMessages.exploreCategories,
-            style: TextStyle(
-              fontSize: AppSizes.w(context, 18),
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-        SizedBox(
-          height: AppSizes.h(context, 130),
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: Insets.xsm),
-            itemCount: categories.length,
-            itemBuilder: (context, index) {
-              final item = categories[index];
-              return GestureDetector(
-                onTap: () => onCategorySelected(index),
-                child: _CategoryItem(
-                  title: item["title"]!,
-                  image: item["image"]!,
-                  isSelected: selectedIndex == index,
+        if (dashboardProvider.isLoading && categories.isEmpty) {
+          return const SizedBox.shrink();
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Insets.sm),
+              child: Text(
+                UserMessages.exploreCategories,
+                style: TextStyle(
+                  fontSize: AppSizes.w(context, 18),
+                  fontWeight: FontWeight.w700,
                 ),
-              );
-            },
-          ),
-        ),
-      ],
+              ),
+            ),
+            SizedBox(
+              height: AppSizes.h(context, 130),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: Insets.xsm),
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  final item = categories[index];
+                  final isSelected = dashboardProvider.selectedCategoryId == item['id'];
+                  
+                  return GestureDetector(
+                    onTap: () => dashboardProvider.selectCategory(item['id']),
+                    child: _CategoryItem(
+                      title: item["name"]!,
+                      image: item["image"]!,
+                      isSelected: isSelected,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -66,59 +72,55 @@ class _CategoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Insets.xxs),
-      child: Container(
-        height: AppSizes.h(context, 90),
-        width: AppSizes.w(context, 90),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.primaryYellow : AppColors.naturalWhite,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.naturalBlack.withOpacity(0.2),
-              blurRadius: AppSizes.w(context, 10),
-              spreadRadius: AppSizes.w(context, 1),
-              offset: const Offset(0, 4),
-            ),
-            BoxShadow(
-              color: AppColors.naturalBlack.withOpacity(0.08),
-              blurRadius: AppSizes.w(context, 18),
-              spreadRadius: AppSizes.w(context, 2),
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(Insets.xxs),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: AppSizes.h(context, 55),
-                width: AppSizes.w(context, 55),
-                child: Image.asset(
-                  image,
-                  fit: BoxFit.contain,
-                  cacheWidth: 200, // Optimize loading for large images
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Icon(Icons.broken_image, color: Colors.grey);
-                  },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            height: AppSizes.h(context, 80),
+            width: AppSizes.w(context, 80),
+            decoration: BoxDecoration(
+              color: isSelected ? AppColors.primaryYellow : AppColors.naturalWhite,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.naturalBlack.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
                 ),
-              ),
-              SizedBox(height: Insets.xxs),
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: AppSizes.w(context, 9),
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.naturalBlack,
-                ),
-              ),
-            ],
+              ],
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(Insets.xs),
+              child: image.startsWith('http')
+                  ? CachedNetworkImage(
+                      imageUrl: image,
+                      fit: BoxFit.contain,
+                      placeholder: (context, url) => const CircularProgressIndicator(strokeWidth: 2),
+                      errorWidget: (context, url, error) => const Icon(Icons.broken_image),
+                    )
+                  : Image.asset(
+                      image,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image),
+                    ),
+            ),
           ),
-        ),
+          SizedBox(height: Insets.xxs),
+          SizedBox(
+            width: AppSizes.w(context, 85),
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: AppSizes.w(context, 10),
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                color: AppColors.naturalBlack,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

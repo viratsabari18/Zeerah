@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:zeerah/core/providers/address_provider.dart';
 import 'package:zeerah/core/common/app_exports.dart';
 import 'package:zeerah/firebase_options.dart';
+import 'package:zeerah/core/providers/dashboard_provider.dart';
 import 'package:zeerah/core/providers/user_provider.dart';
 
 void main() async {
@@ -21,6 +22,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AddressProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => DashboardProvider()),
       ],
       child: const MyApp(),
     ),

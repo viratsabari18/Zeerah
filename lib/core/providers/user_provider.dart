@@ -25,6 +25,14 @@ class UserProvider with ChangeNotifier {
     return "User";
   }
 
+  // Generate unique referral code from UID
+  String get referralCode {
+    if (_user == null) return "ZEERAH";
+    final uid = _user!.uid;
+    if (uid.length < 6) return uid.toUpperCase();
+    return uid.substring(uid.length - 6).toUpperCase();
+  }
+
   void setUser(User? user) {
     _user = user;
     notifyListeners();

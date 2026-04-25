@@ -1,7 +1,6 @@
 import 'package:zeerah/core/common/app_exports.dart';
 import 'package:zeerah/screens/home/expolore_categories.dart';
 import 'package:zeerah/screens/home/expolre_categories_stack.dart';
-
 import 'package:zeerah/screens/home/home_offer_section.dart';
 import 'package:zeerah/screens/home/home_top_banner.dart';
 import 'package:zeerah/screens/home/refer_section.dart';
@@ -16,13 +15,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedCategoryIndex = 0;
-
   @override
   Widget build(BuildContext context) {
-    final selectedCategoryName = CategoryData.categories[_selectedCategoryIndex]["title"]!;
-    final stackItems = CategoryData.getItemsForCategory(selectedCategoryName);
-
     return Scaffold(
       backgroundColor: AppColors.naturalWhite,
       body: SafeArea(
@@ -42,23 +36,12 @@ class _HomePageState extends State<HomePage> {
             ),
             const SliverToBoxAdapter(child: SearchBox()),
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
-            SliverToBoxAdapter(
-              child: ExpoloreCategories(
-                selectedIndex: _selectedCategoryIndex,
-                onCategorySelected: (index) {
-                  setState(() {
-                    _selectedCategoryIndex = index;
-                  });
-                },
-              ),
+            const SliverToBoxAdapter(
+              child: ExpoloreCategories(),
             ),
-            SliverToBoxAdapter(
-              child: ExpolreCategoriesStack(
-                items: stackItems,
-                categoryName: selectedCategoryName,
-              ),
+            const SliverToBoxAdapter(
+              child: ExpolreCategoriesStack(),
             ),
-
             SliverToBoxAdapter(child: ReliableAndTrustworthySection()),
             SliverToBoxAdapter(child: ReferSection()),
           ],

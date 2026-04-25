@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:zeerah/core/providers/address_provider.dart';
 import 'package:zeerah/core/common/app_exports.dart';
 import 'package:zeerah/core/providers/user_provider.dart';
+import 'package:zeerah/core/providers/dashboard_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class HomeTopBanner extends StatefulWidget {
   const HomeTopBanner({super.key});
@@ -15,68 +17,101 @@ class HomeTopBanner extends StatefulWidget {
 class _HomeTopBannerState extends State<HomeTopBanner> {
   int currentIndex = 0;
 
-  final List<String> banners = [
-    UserMessages.homepageBannerDummy2,
-    UserMessages.homepageBannerDummy3,
-    UserMessages.homeBanner,
-    UserMessages.homepageBannerDummy,
-  ];
+  @override
+  void initState() {
+    super.initState();
+    // Fetch initial data (dashboard + categories) on initialization
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<DashboardProvider>(context, listen: false).fetchInitialData();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: AppSizes.h(context, 325),
-      child: Stack(
-        children: [
-          CarouselSlider(
-            options: CarouselOptions(
-              height: AppSizes.h(context, 325),
-              autoPlay: true,
-              viewportFraction: 1.0,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  currentIndex = index;
-                });
-              },
-            ),
-            items: banners.map((image) {
-              return Image.asset(
-                image,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              );
-            }).toList(),
+    return Consumer<DashboardProvider>(
+      builder: (context, dashboardProvider, _) {
+        final List<String> banners = dashboardProvider.sliderImages.isNotEmpty 
+            ? dashboardProvider.sliderImages 
+            : [
+                UserMessages.homepageBannerDummy2,
+                UserMessages.homepageBannerDummy3,
+                UserMessages.homeBanner,
+                UserMessages.homepageBannerDummy,
+              ];
+
+        if (dashboardProvider.isLoading && dashboardProvider.sliderImages.isEmpty) {
+          return SizedBox(
+            height: AppSizes.h(context, 325),
+            child: const Center(child: CircularProgressIndicator(color: AppColors.primaryRed)),
+          );
+        }
+
+        return SizedBox(
+          height: AppSizes.h(context, 325),
+          child: Stack(
+            children: [
+              CarouselSlider(
+                options: CarouselOptions(
+                  height: AppSizes.h(context, 325),
+                  autoPlay: true,
+                  viewportFraction: 1.0,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      currentIndex = index;
+                    });
+                  },
+                ),
+                items: banners.map((image) {
+                  return image.startsWith('http') 
+                    ? CachedNetworkImage(
+                        imageUrl: image,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Container(
+                          color: Colors.grey[200],
+                          child: const Center(child: CircularProgressIndicator()),
+                        ),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                      )
+                    : Image.asset(
+                        image,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      );
+                }).toList(),
+              ),
+              Positioned(
+                top: Insets.xs,
+                left: 0,
+                right: 0,
+                child: SafeArea(child: _topAppBar(context)),
+              ),
+              Positioned(
+                bottom: Insets.md,
+                left: 0,
+                right: 0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(banners.length, (index) {
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      margin: EdgeInsets.symmetric(horizontal: Insets.xxs),
+                      width: currentIndex == index ? Insets.xsm : Insets.xxs,
+                      height: Insets.xxs,
+                      decoration: BoxDecoration(
+                        color: currentIndex == index
+                            ? AppColors.softBlue
+                            : AppColors.naturalBlack.withOpacity(0.54),
+                        borderRadius: BorderRadius.circular(Insets.xs),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ],
           ),
-          Positioned(
-            top: Insets.xs,
-            left: 0,
-            right: 0,
-            child: SafeArea(child: _topAppBar(context)),
-          ),
-          Positioned(
-            bottom: Insets.md,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(banners.length, (index) {
-                return AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  margin: EdgeInsets.symmetric(horizontal: Insets.xxs),
-                  width: currentIndex == index ? Insets.xsm : Insets.xxs,
-                  height: Insets.xxs,
-                  decoration: BoxDecoration(
-                    color: currentIndex == index
-                        ? AppColors.softBlue
-                        : AppColors.naturalBlack.withOpacity(0.54),
-                    borderRadius: BorderRadius.circular(Insets.xs),
-                  ),
-                );
-              }),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -131,7 +166,6 @@ class _HomeTopBannerState extends State<HomeTopBanner> {
                               ),
                             ),
                           ),
-                         
                         ],
                       ),
                     ],

@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "14780875671",
-    "project_id": "unfazzed",
-    "storage_bucket": "unfazzed.firebasestorage.app"
+    "project_number": "888601961403",
+    "project_id": "aphomeservices-5ws1oh",
+    "storage_bucket": "aphomeservices-5ws1oh.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:14780875671:android:e07ed18f201480e43bfad2",
+        "mobilesdk_app_id": "1:888601961403:android:0422c526c0698a919d5a9e",
         "android_client_info": {
           "package_name": "com.example.zeerah"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyACUyaRRPMjAx6GJN-mwEGjAzhnHmXjL0c"
+          "current_key": "AIzaSyC8qDhsCwyCFTwwf9grfTm2i7pPtV-KFkw"
         }
       ],
       "services": {

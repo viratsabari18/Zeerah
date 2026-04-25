@@ -1,30 +1,101 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'dart:ui';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zeerah/core/common/app_exports.dart';
+import 'package:zeerah/core/providers/dashboard_provider.dart';
 
 class ExpolreCategoriesStack extends StatelessWidget {
-  final List<CategoryItem> items;
-  final String categoryName;
-  const ExpolreCategoriesStack({
-    super.key,
-    required this.items,
-    required this.categoryName,
-  });
+  const ExpolreCategoriesStack({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.45,
-          child: EditorPickCarousel(items: items, categoryName: categoryName),
-        ),
-        const SizedBox(height: 12),
-      ],
+    return Consumer<DashboardProvider>(
+      builder: (context, dashboardProvider, _) {
+        final subCategories = dashboardProvider.currentSubCategories;
+
+        // Map dynamic sub-categories to CategoryItem format for the carousel
+        final List<CategoryItem> items = subCategories.map((sc) {
+          return CategoryItem(
+            title: sc['name'] ?? "",
+            image: sc['image'] ?? "",
+            subtitle: sc['description'] ?? "Professional service at your doorstep",
+          );
+        }).toList();
+
+        if (dashboardProvider.isLoading && items.isEmpty) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 0.45,
+            child: const Center(child: CircularProgressIndicator(color: AppColors.primaryRed)),
+          );
+        }
+
+        if (items.isEmpty && !dashboardProvider.isLoading) {
+          // Show a placeholder card if no items are found
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.45,
+                child: Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.74,
+                    height: MediaQuery.of(context).size.height * 0.35,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(color: Colors.grey[300]!),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.construction_outlined, size: 48, color: Colors.grey[400]),
+                        const SizedBox(height: 16),
+                        Text(
+                          "Services Coming Soon",
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "We're working on adding more services here",
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: Colors.grey[400],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
+          );
+        }
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.45,
+              child: EditorPickCarousel(
+                items: items, 
+                categoryName: dashboardProvider.categories.firstWhere(
+                  (c) => c['id'] == dashboardProvider.selectedCategoryId,
+                  orElse: () => {'name': ''}
+                )['name'] ?? "",
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
+        );
+      },
     );
   }
 }
@@ -43,8 +114,8 @@ class EditorPickCarousel extends StatefulWidget {
 }
 
 class _EditorPickCarouselState extends State<EditorPickCarousel> {
-  late final PageController _controller;
-  late final int _baseOffset;
+  late PageController _controller;
+  late int _baseOffset;
 
   // Tuning knobs for the stack depth effect.
   static const double _stackScaleStep = 0.07;
@@ -55,11 +126,23 @@ class _EditorPickCarouselState extends State<EditorPickCarousel> {
   @override
   void initState() {
     super.initState();
+    _initController();
+  }
+
+  void _initController() {
     _baseOffset = (1000 * widget.items.length).toInt();
     _controller = PageController(
       viewportFraction: 1.0,
       initialPage: _baseOffset,
     );
+  }
+
+  @override
+  void didUpdateWidget(EditorPickCarousel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.items.length != widget.items.length || oldWidget.categoryName != widget.categoryName) {
+      _initController();
+    }
   }
 
   @override
@@ -81,6 +164,8 @@ class _EditorPickCarouselState extends State<EditorPickCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.items.isEmpty) return const SizedBox.shrink();
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final w = constraints.maxWidth;
@@ -199,7 +284,6 @@ class _RenderEntry {
   const _RenderEntry({required this.index, required this.delta});
 }
 
-// Fixed ImageView to handle both asset and network images
 class _ImageView extends StatelessWidget {
   final CategoryItem item;
   final String categoryName;
@@ -223,7 +307,7 @@ class _ImageView extends StatelessWidget {
               ],
             ),
             clipBehavior: Clip.antiAlias,
-            child: Positioned.fill(child: _buildImage()),
+            child: SizedBox.expand(child: _buildImage()),
           ),
         ),
         Positioned(
@@ -238,17 +322,14 @@ class _ImageView extends StatelessWidget {
 
   Widget _buildImage() {
     final imageUrl = item.image;
-    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-      return Image.network(
-        imageUrl,
+    if (imageUrl.startsWith('http')) {
+      return CachedNetworkImage(
+        imageUrl: imageUrl,
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
-        errorBuilder: (_, __, ___) => _buildErrorWidget(),
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) return child;
-          return _buildLoadingWidget();
-        },
+        placeholder: (context, url) => _buildLoadingWidget(),
+        errorWidget: (context, url, error) => _buildErrorWidget(),
       );
     } else {
       return Image.asset(
@@ -306,23 +387,16 @@ class _BookNowButtonState extends State<_BookNowButton> {
   }
 
   void _onDragEnd(DragEndDetails details, double maxWidth) {
-    // Lower threshold to 70% of max width for easier activation
     if (_dragOffset >= (maxWidth - 60) * 0.7) {
-      // Haptic feedback first
       HapticFeedback.mediumImpact();
-      
-      // Eager reset so it doesn't look "stuck" during transition
       final String capturedCategory = widget.categoryName;
       setState(() => _dragOffset = 0);
-      
-      // Navigate to the Category Details List (as shown in user's screenshot 160935)
       Navigator.pushNamed(
         context, 
         AppRoutes.cleaningServices, 
         arguments: capturedCategory,
       );
     } else {
-      // Snap back if threshold wasn't met
       setState(() => _dragOffset = 0);
     }
   }
@@ -351,7 +425,7 @@ class _BookNowButtonState extends State<_BookNowButton> {
                   Center(
                     child: Opacity(
                       opacity: (1 - (_dragOffset / (totalWidth - 60))).clamp(0.2, 1.0),
-                      child: const Text('Swipe Now', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
+                      child: const Text('Swipe to Book', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
                     ),
                   ),
                   Align(
