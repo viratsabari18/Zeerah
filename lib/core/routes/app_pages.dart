@@ -32,9 +32,10 @@ class AppPages {
   static Map<String, WidgetBuilder> routes = {
     AppRoutes.splash: (context) => SplashScreen(),
     AppRoutes.signIn: (context) => SignInScreen(),
-    AppRoutes.landingPage:(context)=>LandingScreen(),
+    AppRoutes.landingPage: (context) => LandingScreen(),
     AppRoutes.otpVerifly: (context) {
-      final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      final args =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       return OtpVerification(
         verificationId: args['verificationId'],
         phoneNumber: args['phoneNumber'],
@@ -45,9 +46,16 @@ class AppPages {
       final title = ModalRoute.of(context)!.settings.arguments as String;
       return ServiceCetagorices(title: title);
     },
+    // In your router configuration
     AppRoutes.cleaningServices: (context) {
-      final categoryName = ModalRoute.of(context)!.settings.arguments as String;
-      return CategoryDetailsScreen(categoryName: categoryName);
+      final args =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+      return CategoryDetailsScreen(
+        subcategoryName: args['subcategoryName'],
+        subcategoryId: args['subcategoryId'],
+        parentCategoryName: args['parentCategoryName'],
+      );
     },
     AppRoutes.serviceDetails: (context) {
       final service =
@@ -107,17 +115,21 @@ class AppPages {
     AppRoutes.serviceInProgress: (context) =>
         const BookingServiceProgressHome(serviceDurationInSeconds: 10),
     AppRoutes.notificationHistory: (context) => const NotificationHistory(),
-    AppRoutes.kycVerfication:(context)=>const KycVerifaication(),
-    AppRoutes.bookingHistory:(context)=>BookingHistory(),
-    AppRoutes.favoitesHistory:(context)=>FavorieServiceHistory(),
+    AppRoutes.kycVerfication: (context) => const KycVerifaication(),
+    AppRoutes.bookingHistory: (context) => BookingHistory(),
+    AppRoutes.favoitesHistory: (context) => FavorieServiceHistory(),
 
-    AppRoutes.chatHomeScreen:(context)=>ChatRoomScreen(),
+    AppRoutes.chatHomeScreen: (context) => ChatRoomScreen(),
     AppRoutes.profile: (context) {
-      final user = ModalRoute.of(context)!.settings.arguments as UserModel? ?? UserModel.mock();
+      final user =
+          ModalRoute.of(context)!.settings.arguments as UserModel? ??
+          UserModel.mock();
       return ProfileScreen(user: user);
     },
     AppRoutes.walletHistory: (context) {
-      final user = ModalRoute.of(context)!.settings.arguments as UserModel? ?? UserModel.mock();
+      final user =
+          ModalRoute.of(context)!.settings.arguments as UserModel? ??
+          UserModel.mock();
       return WalletHistoryScreen(user: user);
     },
     AppRoutes.helpDesk: (context) => const HelpDeskScreen(),
@@ -125,7 +137,9 @@ class AppPages {
     AppRoutes.selectLocation: (context) => const SelectLocationScreen(),
     AppRoutes.confirmLocation: (context) => const ConfirmLocationScreen(),
     AppRoutes.referral: (context) {
-      final user = ModalRoute.of(context)!.settings.arguments as UserModel? ?? UserModel.mock();
+      final user =
+          ModalRoute.of(context)!.settings.arguments as UserModel? ??
+          UserModel.mock();
       return ReferralScreen(user: user);
     },
   };

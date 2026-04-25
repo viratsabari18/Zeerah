@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'user_messages.dart';
 
 class CategoryItem {
+  final int id;        
   final String title;
   final String image;
   final String subtitle;
@@ -14,6 +15,7 @@ class CategoryItem {
   final List<Map<String, dynamic>> customerReviews;
 
   const CategoryItem({
+    required this.id,
     required this.title,
     required this.image,
     this.subtitle = "Professional service at your doorstep",
@@ -84,9 +86,10 @@ class CategoryData {
             "comment": "Great work on the kitchen cabinets!",
             "date": "5 days ago"
           }
-        ],
+        ], id: 0,
       ),
       CategoryItem(
+        id:0,
         title: "Bathroom Cleaning",
         subtitle: "Sparkling clean bathrooms",
         price: "120",
@@ -154,7 +157,7 @@ class CategoryData {
             "comment": "Very thorough with the cabinets. Recommended!",
             "date": "3 days ago"
           }
-        ],
+        ],id:0,
       ),
       CategoryItem(
         title: "Living Room Cleaning",
@@ -189,7 +192,7 @@ class CategoryData {
             "comment": "Quick and very effective. House feels fresh.",
             "date": "4 days ago"
           }
-        ],
+        ],id:0,
       ),
     ],
     "Electrician": [
@@ -219,7 +222,7 @@ class CategoryData {
         ],
         customerReviews: [
           {"name": "Robert", "rating": 5, "comment": "Quick installation and very safe.", "date": "1 day ago"}
-        ],
+        ],id:0,
       ),
       CategoryItem(
         title: "Switch & Socket",
@@ -244,7 +247,7 @@ class CategoryData {
         ],
         customerReviews: [
           {"name": "Linda", "rating": 4, "comment": "Neat work on the living room sockets.", "date": "3 days ago"}
-        ],
+        ],id:0,
       ),
       CategoryItem(
         title: "Wiring Repair",
@@ -271,7 +274,7 @@ class CategoryData {
         ],
         customerReviews: [
           {"name": "Kevin", "rating": 5, "comment": "Expert handling of complex shorts.", "date": "1 week ago"}
-        ],
+        ],id:0,
       ),
       CategoryItem(
         title: "Inverter",
@@ -298,7 +301,7 @@ class CategoryData {
         ],
         customerReviews: [
           {"name": "Suresh", "rating": 5, "comment": "Very professional setup. Backup is great.", "date": "3 days ago"}
-        ],
+        ],id:0,
       ),
       CategoryItem(
         title: "Light Fitting",
@@ -325,7 +328,7 @@ class CategoryData {
         ],
         customerReviews: [
           {"name": "Anita", "rating": 5, "comment": "The dining lights look perfect now.", "date": "2 days ago"}
-        ],
+        ],id:0,
       ),
     ],
     "Pest\nControl": [
@@ -352,7 +355,7 @@ class CategoryData {
         ],
         customerReviews: [
           {"name": "Mike", "rating": 5, "comment": "No more roaches after one visit!", "date": "1 week ago"}
-        ],
+        ],id:0,
       ),
       CategoryItem(
         title: "Termite Control",
@@ -379,7 +382,7 @@ class CategoryData {
         ],
         customerReviews: [
           {"name": "Mark", "rating": 5, "comment": "The team was very thorough with the drilling.", "date": "1 week ago"}
-        ],
+        ],id:0,
       ),
       CategoryItem(
         title: "Bed Bugs Control",
@@ -406,7 +409,7 @@ class CategoryData {
         ],
         customerReviews: [
           {"name": "Jane", "rating": 5, "comment": "Finally a peaceful night's sleep. Thank you!", "date": "2 days ago"}
-        ],
+        ],id:0,
       ),
     ],
     "Plumber": [
@@ -433,7 +436,7 @@ class CategoryData {
         ],
         customerReviews: [
           {"name": "Chris", "rating": 4, "comment": "Fixed the drip finally.", "date": "2 days ago"}
-        ],
+        ],id:0,
       ),
       CategoryItem(
         title: "Pipe Leakage",
@@ -461,7 +464,7 @@ class CategoryData {
         ],
         customerReviews: [
           {"name": "Robert", "rating": 5, "comment": "Saved my kitchen from a flood!", "date": "1 day ago"}
-        ],
+        ],id:0,
       ),
       CategoryItem(
         title: "Toilet Repair",
@@ -489,7 +492,7 @@ class CategoryData {
         ],
         customerReviews: [
           {"name": "Lisa", "rating": 5, "comment": "Excellent work on the guest bathroom.", "date": "4 days ago"}
-        ],
+        ],id:0,
       ),
     ],
     "Appliance\nRepair": [
@@ -516,7 +519,7 @@ class CategoryData {
         ],
         customerReviews: [
           {"name": "Anna", "rating": 5, "comment": "AC is cooling like new!", "date": "1 day ago"}
-        ],
+        ],id:0,
       ),
       CategoryItem(
         title: "Fridge Repair",
@@ -544,7 +547,7 @@ class CategoryData {
         ],
         customerReviews: [
           {"name": "Daniel", "rating": 5, "comment": "Fixed the cooling issue in 30 minutes.", "date": "3 days ago"}
-        ],
+        ],id:0,
       ),
       CategoryItem(
         title: "TV Installation",
@@ -572,7 +575,7 @@ class CategoryData {
         ],
         customerReviews: [
           {"name": "Sarah", "rating": 5, "comment": "Perfectly leveled and neatly wired.", "date": "1 week ago"}
-        ],
+        ],id:0,
       ),
     ],
   };

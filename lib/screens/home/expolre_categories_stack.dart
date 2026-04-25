@@ -1,9 +1,12 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:ui';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
 import 'package:zeerah/core/common/app_exports.dart';
 import 'package:zeerah/core/providers/dashboard_provider.dart';
 
@@ -15,13 +18,15 @@ class ExpolreCategoriesStack extends StatelessWidget {
     return Consumer<DashboardProvider>(
       builder: (context, dashboardProvider, _) {
         final subCategories = dashboardProvider.currentSubCategories;
-
+        
         // Map dynamic sub-categories to CategoryItem format for the carousel
         final List<CategoryItem> items = subCategories.map((sc) {
           return CategoryItem(
+             id: sc['id'],
             title: sc['name'] ?? "",
             image: sc['image'] ?? "",
-            subtitle: sc['description'] ?? "Professional service at your doorstep",
+            subtitle: sc['description'] ?? "Professional service at your doorstep", 
+           
           );
         }).toList();
 
@@ -260,6 +265,7 @@ class _EditorPickCarouselState extends State<EditorPickCarousel> {
       xOffset = -cardWidth * _leftPeekFraction * t;
       opacity = (1.0 - 0.25 * t).clamp(0.0, 1.0);
     }
+   
 
     return Transform.translate(
       offset: Offset(xOffset, 0),
@@ -270,7 +276,7 @@ class _EditorPickCarouselState extends State<EditorPickCarousel> {
           child: SizedBox(
             width: cardWidth,
             height: cardHeight,
-            child: _ImageView(item: item, categoryName: widget.categoryName),
+            child: _ImageView(item: item, categoryName: widget.categoryName,subCategoryId: item.id,),
           ),
         ),
       ),
@@ -286,8 +292,9 @@ class _RenderEntry {
 
 class _ImageView extends StatelessWidget {
   final CategoryItem item;
-  final String categoryName;
-  const _ImageView({required this.item, required this.categoryName});
+  final String categoryName;  
+  final int subCategoryId;   
+  const _ImageView({required this.item, required this.categoryName, required this.subCategoryId});
 
   @override
   Widget build(BuildContext context) {
@@ -314,7 +321,7 @@ class _ImageView extends StatelessWidget {
           left: 10,
           right: 10,
           bottom: 12,
-          child: _BookNowButton(item: item, categoryName: categoryName),
+          child: _BookNowButton(item: item, categoryName: categoryName,subCategoryId: subCategoryId,),
         ),
       ],
     );
@@ -371,7 +378,15 @@ class _ImageView extends StatelessWidget {
 class _BookNowButton extends StatefulWidget {
   final CategoryItem item;
   final String categoryName;
-  const _BookNowButton({required this.item, required this.categoryName});
+   final int subCategoryId;  
+
+  const _BookNowButton({
+    Key? key,
+    required this.item,
+    required this.categoryName,
+    required this.subCategoryId,
+
+  }) : super(key: key);
 
   @override
   State<_BookNowButton> createState() => _BookNowButtonState();
@@ -392,9 +407,13 @@ class _BookNowButtonState extends State<_BookNowButton> {
       final String capturedCategory = widget.categoryName;
       setState(() => _dragOffset = 0);
       Navigator.pushNamed(
-        context, 
+        context,
         AppRoutes.cleaningServices, 
-        arguments: capturedCategory,
+        arguments: {
+         'subcategoryName': widget.item.title,      
+          'subcategoryId': widget.subCategoryId,    
+          'parentCategoryName': widget.categoryName,
+        },
       );
     } else {
       setState(() => _dragOffset = 0);

@@ -234,6 +234,11 @@ static const String searchNotifications = "Search notifications";
 static const String all = "All";
 static const String noNotificationsFound = "No notifications found";
 
+static const String noServicesFound = "No services found for this category";
+static const String viewDetails = "View Details";
+static const String defaultRating = "4.5";
+static const String defaultServiceDescription = "Professional service at your doorstep";
+
 static const String notificationAcceptance = "lib/assets/images/notifaiction_acceptance.png";
 static const String notificationPayment = "lib/assets/images/notification_payment.png";
 static const String notificationDriving = "lib/assets/images/notification_driving.png";

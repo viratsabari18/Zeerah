@@ -82,4 +82,15 @@ static const Color unselectedNavColor = Colors.grey;
 static const Color navBarBgColor = Color(0xFFFFD6D6);
 
 
+static const Color categoryBgColor = Color(0xFFF9F9F4);
+static const Color naturalBlack87 = Color(0xDD000000);
+
+static const Color cardLightGreen = Color(0xFFE8F5E9);
+static const Color cardLightBlue = Color(0xFFE3F2FD);
+static const Color cardLightYellow = Color(0xFFFEF9E4);
+static const Color cardLightPink = Color(0xFFFCE4EC);
+static const Color cardLightPurple = Color(0xFFF3E5F5);
+static const Color cardLightTeal = Color(0xFFE0F2F1);
+static const Color bookNowButtonColor = Color(0xFF263238);
+
 }

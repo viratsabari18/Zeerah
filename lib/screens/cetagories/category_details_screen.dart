@@ -1,137 +1,204 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:provider/provider.dart';
+import 'package:zeerah/controllers/service%20_list_controller.dart';
+
 import 'package:zeerah/core/common/app_exports.dart';
+import 'package:zeerah/core/models/service_list_model.dart';
 
 class CategoryDetailsScreen extends StatelessWidget {
-  final String categoryName;
+  final String subcategoryName;
+  final int subcategoryId;
+  final String? parentCategoryName;
 
-  const CategoryDetailsScreen({required this.categoryName, super.key});
+  const CategoryDetailsScreen({
+    Key? key,
+    required this.subcategoryName,
+    required this.subcategoryId,
+    this.parentCategoryName,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Robust matching: trim and replace newlines to ensure we match the keys in categoryMap
-    final String cleanKey = categoryName.trim();
-    final List<CategoryItem> services = CategoryData.getItemsForCategory(cleanKey);
+    // Print the three arguments
+    print("=== CategoryDetailsScreen Arguments ===");
+    print("subcategoryName: $subcategoryName");
+    print("subcategoryId: $subcategoryId");
+    print("parentCategoryName: $parentCategoryName");
+    print("=======================================");
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F9F4), // Creamy background from image
+      backgroundColor: AppColors.categoryBgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(Insets.xs),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
+              color: AppColors.naturalWhite,
+              borderRadius: BorderRadius.circular(Insets.xsm),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 10,
+                  color: AppColors.naturalBlack.withOpacity(0.05),
+                  blurRadius: AppSizes.w(context, 10),
                 ),
               ],
             ),
             child: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new, size: 18, color: Colors.black87),
+              icon: const Icon(
+                Icons.arrow_back_ios_new,
+                size: 18,
+                color: AppColors.naturalBlack87,
+              ),
               onPressed: () => Navigator.pop(context),
             ),
           ),
         ),
         title: Text(
-          categoryName.replaceAll('\n', ' '), // Clean up any newline characters for display
-          style: const TextStyle(
-            color: Colors.black87,
+          subcategoryName.replaceAll('\n', ' '),
+          style: TextStyle(
+            color: AppColors.naturalBlack87,
             fontWeight: FontWeight.bold,
-            fontSize: 20,
+            fontSize: AppSizes.w(context, 20),
           ),
         ),
         centerTitle: true,
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(Insets.xs),
             child: Container(
-              width: 44,
+              width: AppSizes.w(context, 44),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                color: AppColors.naturalWhite,
+                borderRadius: BorderRadius.circular(Insets.xsm),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
+                    color: AppColors.naturalBlack.withOpacity(0.05),
+                    blurRadius: AppSizes.w(context, 10),
                   ),
                 ],
               ),
-              child: const Icon(Icons.notes, color: Colors.black87), // Filter-like icon
+              child: const Icon(Icons.notes, color: AppColors.naturalBlack87),
             ),
           ),
         ],
       ),
-      body: services.isEmpty 
-        ? const Center(child: Text("No services found for this category"))
-        : ListView.separated(
-            padding: const EdgeInsets.all(20),
-            itemCount: services.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 16),
+      body: Consumer<ServiceListController>(
+        builder: (context, controller, _) {
+          if (controller.serviceList.isEmpty && !controller.isLoading) {
+            controller.setSubcategory(subcategoryId);
+            controller.fetchServices();
+          }
+
+          if (controller.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.primaryRed),
+            );
+          }
+
+          if (controller.serviceList.isEmpty) {
+            return Center(child: Text(UserMessages.noServicesFound));
+          }
+
+          return ListView.separated(
+            padding: EdgeInsets.all(Insets.md),
+            itemCount: controller.serviceList.length,
+            separatorBuilder: (_, __) =>
+                SizedBox(height: AppSizes.h(context, 16)),
             itemBuilder: (context, index) {
-              final service = services[index];
-              return _ServiceCard(item: service);
+              final service = controller.serviceList[index];
+              return _ServiceCard(service: service);
             },
-          ),
+          );
+        },
+      ),
     );
   }
 }
 
 class _ServiceCard extends StatelessWidget {
-  final CategoryItem item;
+  final ServiceData service;
 
-  const _ServiceCard({required this.item});
+  const _ServiceCard({required this.service});
 
   @override
   Widget build(BuildContext context) {
+    final List<Color> cardColors = [
+      AppColors.cardLightGreen,
+      AppColors.cardLightBlue,
+      AppColors.cardLightYellow,
+      AppColors.cardLightPink,
+      AppColors.cardLightPurple,
+      AppColors.cardLightTeal,
+    ];
+    final Color cardColor = cardColors[service.id! % cardColors.length];
+
     return Container(
-      height: 160,
+      height: AppSizes.h(context, 160),
       decoration: BoxDecoration(
-        color: item.color,
-        borderRadius: BorderRadius.circular(30), // Large rounded corners as seen in design
+        color: cardColor,
+        borderRadius: BorderRadius.circular(Insets.lg),
       ),
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(Insets.xsm),
       child: Row(
         children: [
-          // Image on the left + View Details
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                width: 130,
-                height: 110,
+                width: AppSizes.w(context, 130),
+                height: AppSizes.h(context, 110),
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(22),
+                  borderRadius: BorderRadius.circular(Insets.md),
                 ),
-                child: _buildImage(),
+                child: CachedNetworkImage(
+                  imageUrl: service.providerImage?? "",
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
+                  placeholder: (context, url) => Container(
+                    color: Colors.grey[300],
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.naturalGray,
+                        ),
+                      ),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    color: Colors.grey[300],
+                    child: const Icon(
+                      Icons.broken_image,
+                      color: AppColors.naturalBlack26,
+                    ),
+                  ),
+                ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: AppSizes.h(context, 8)),
               GestureDetector(
                 onTap: () {
                   HapticFeedback.selectionClick();
                   Navigator.pushNamed(
                     context,
                     AppRoutes.serviceDetails,
-                    arguments: item,
+                    arguments: service,
                   );
                 },
-                child: const Text(
-                  'View Details',
+                child: Text(
+                  UserMessages.viewDetails,
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: AppSizes.w(context, 11),
                     fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                   
+                    color: AppColors.naturalBlack,
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(width: 16),
-          // Info on the right
+          SizedBox(width: Insets.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,88 +206,102 @@ class _ServiceCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.auto_fix_high, size: 16, color: Colors.black45), // Sparkle/check icon
-                    const SizedBox(width: 4),
+                    const Icon(
+                      Icons.auto_fix_high,
+                      size: 16,
+                      color: AppColors.naturalBlack45,
+                    ),
+                    SizedBox(width: Insets.xxs),
                     Expanded(
                       child: Text(
-                        item.title,
+                        service.name ?? "",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 18,
+                        style: TextStyle(
+                          fontSize: AppSizes.w(context, 18),
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                          color: AppColors.naturalBlack87,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 4),
-                    // Rating Badge
+                    SizedBox(width: Insets.xxs),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Insets.xxs,
+                        vertical: Insets.xxxs,
+                      ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
+                        color: AppColors.naturalWhite,
+                        borderRadius: BorderRadius.circular(Insets.xs),
                       ),
                       child: Row(
                         children: [
                           Text(
-                            item.rating,
-                            style: const TextStyle(
-                              fontSize: 12,
+                            service.totalRating?.toString() ??
+                                UserMessages.defaultRating,
+                            style: TextStyle(
+                              fontSize: AppSizes.w(context, 12),
                               fontWeight: FontWeight.bold,
-                              color: Colors.black87,
+                              color: AppColors.naturalBlack87,
                             ),
                           ),
-                          const SizedBox(width: 2),
-                          const Icon(Icons.star, size: 12, color: Colors.amber),
+                          SizedBox(width: Insets.xxxs),
+                          const Icon(
+                            Icons.star,
+                            size: 12,
+                            color: AppColors.starOrange,
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: AppSizes.h(context, 4)),
                 Text(
-                  item.subtitle,
+                  service.description ?? UserMessages.defaultServiceDescription,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: Colors.black45,
+                  style: TextStyle(
+                    fontSize: AppSizes.w(context, 13),
+                    color: AppColors.naturalBlack45,
                     letterSpacing: 0.2,
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: AppSizes.h(context, 16)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '₹${item.price}',
-                      style: const TextStyle(
-                        fontSize: 20,
+                      '₹${service.price ?? 0}',
+                      style: TextStyle(
+                        fontSize: AppSizes.w(context, 15),
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: AppColors.naturalBlack87,
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
                         HapticFeedback.lightImpact();
                         Navigator.pushNamed(
-                          context, 
+                          context,
                           AppRoutes.bookingConfig,
-                          arguments: item,
+                          arguments: service,
                         );
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF263238), // Dark button
-                          borderRadius: BorderRadius.circular(20),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Insets.sm,
+                          vertical: Insets.xs,
                         ),
-                        child: const Text(
-                          'Book Now',
+                        decoration: BoxDecoration(
+                          color: AppColors.bookNowButtonColor,
+                          borderRadius: BorderRadius.circular(Insets.md),
+                        ),
+                        child: Text(
+                          UserMessages.bookNow,
                           style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
+                            color: AppColors.naturalWhite,
+                            fontSize: AppSizes.w(context, 13),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -234,22 +315,5 @@ class _ServiceCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Widget _buildImage() {
-    final String imagePath = item.image;
-    if (imagePath.startsWith('http')) {
-      return Image.network(
-        imagePath,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image, color: Colors.black26)),
-      );
-    } else {
-      return Image.asset(
-        imagePath,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image, color: Colors.black26)),
-      );
-    }
   }
 }
